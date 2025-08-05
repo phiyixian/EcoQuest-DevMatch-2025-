@@ -21,6 +21,18 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/",
   },
   {
+    label: "🌱 EcoQuest",
+    href: "/ecoquest",
+  },
+  {
+    label: "🏆 Leaderboard",
+    href: "/ecoquest/leaderboard",
+  },
+  {
+    label: "🎨 NFT Gallery",
+    href: "/ecoquest/gallery",
+  },
+  {
     label: "Debug Contracts",
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
