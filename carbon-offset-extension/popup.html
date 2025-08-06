@@ -1,29 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Carbon Offset Tracker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoQuest Carbon Offset</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 10px; width: 220px; }
-    h3 { margin-top: 0; }
-    #co2 { font-weight: bold; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 260px;
+      background: linear-gradient(to bottom right, #ecfdf5, #eff6ff);
+      color: #1f2937;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .header h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: bold;
+      color: #065f46; /* green-800 */
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #374151; /* gray-700 */
+    }
+
+    .co2-value {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      color: #16a34a; /* green-600 */
+      margin: 6px 0;
+    }
+
     button {
-      background: #4CAF50;
+      background: #16a34a; /* green-600 */
       color: white;
       border: none;
-      padding: 8px;
+      padding: 10px;
       width: 100%;
       margin-top: 10px;
+      font-weight: 600;
+      border-radius: 6px;
       cursor: pointer;
+      transition: background 0.2s ease;
     }
+
     button:hover {
-      background: #45a049;
+      background: #15803d; /* green-700 */
     }
   </style>
 </head>
 <body>
-  <h3>Carbon Offset Tracker</h3>
-  <p>Today's CO₂: <span id="co2">0 g</span></p>
-  <button id="offsetBtn">Offset Now</button>
+  <div class="container">
+    <div class="header">
+      <h3>🌱 EcoQuest</h3>
+      <p style="font-size:12px;color:#6b7280">Track & Offset Your Browsing CO₂</p>
+    </div>
+
+    <div class="card">
+      <p>This Site Emitted</p>
+      <span id="siteCo2" class="co2-value">Calculating...</span>
+    </div>
+
+    <div class="card">
+      <p>Total CO₂ from Today</p>
+      <span id="totalCo2" class="co2-value">0 g CO₂</span>
+      <button id="offsetBtn">Offset Now</button>
+    </div>
+  </div>
 
   <script src="popup.js"></script>
 </body>

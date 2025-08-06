@@ -1,20 +1,53 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAccount, useBalance, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
-import { parseEther, formatEther } from "viem";
-import { useScaffoldContract } from "~~/hooks/scaffold-eth/useScaffoldContract";
+import type { Abi } from "viem";
+import { formatEther, parseEther } from "viem";
+import { useAccount, useBalance, useContractRead, useWriteContract } from "wagmi";
+import { useSearchParams } from "next/navigation"; // <-- Add this
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
 import { notification } from "~~/utils/scaffold-eth";
 
 // USDC contract address on Optimism Goerli
 const USDC_ADDRESS = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
 
+// Minimal USDC ABI
+const USDC_ABI = [
+  {
+    name: "approve",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "spender", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
+];
+
 export default function EcoQuestDashboard() {
   const { address, isConnected } = useAccount();
   const [donationAmount, setDonationAmount] = useState("");
   const [donationMessage, setDonationMessage] = useState("");
   const [isDonating, setIsDonating] = useState(false);
+
+  const searchParams = useSearchParams();
+
+  // Auto-fill from Chrome Extension query params
+  useEffect(() => {
+    const amountParam = searchParams.get("donation");
+    const msgParam = searchParams.get("message");
+    const autoDonateParam = searchParams.get("autoDonate");
+
+    if (amountParam) setDonationAmount(amountParam);
+    if (msgParam) setDonationMessage(decodeURIComponent(msgParam));
+
+    // If autoDonate=true and wallet is connected, trigger donation
+    if (autoDonateParam === "true" && amountParam && isConnected && !isDonating) {
+      handleDonate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, isConnected]);
 
   // Get contract instances
   const { data: donationContract } = useDeployedContractInfo("EcoQuestDonation");
@@ -25,63 +58,40 @@ export default function EcoQuestDashboard() {
     address: donationContract?.address,
     abi: donationContract?.abi,
     functionName: "totalDonations",
-    watch: true,
+    query: { refetchInterval: 5000 },
   });
 
   const { data: totalCO2Offset } = useContractRead({
     address: donationContract?.address,
     abi: donationContract?.abi,
     functionName: "totalCO2Offset",
-    watch: true,
+    query: { refetchInterval: 5000 },
   });
 
-  const { data: userStats } = useContractRead({
+  type UserStatsTuple = [bigint, bigint];
+
+  const { data } = useContractRead({
     address: donationContract?.address,
-    abi: donationContract?.abi,
+    abi: donationContract?.abi as Abi,
     functionName: "getUserStats",
     args: [address],
-    enabled: !!address,
-    watch: true,
+    query: {
+      enabled: !!address,
+      refetchInterval: 5000,
+    },
   });
+
+  const userStats = data as UserStatsTuple | undefined;
 
   // USDC balance
   const { data: usdcBalance } = useBalance({
     address,
     token: USDC_ADDRESS as `0x${string}`,
-    watch: true,
+    query: { refetchInterval: 5000 },
   });
 
-  // Prepare donation transaction
-  const { config: approveConfig } = usePrepareContractWrite({
-    address: USDC_ADDRESS as `0x${string}`,
-    abi: [
-      {
-        name: "approve",
-        type: "function",
-        stateMutability: "nonpayable",
-        inputs: [
-          { name: "spender", type: "address" },
-          { name: "amount", type: "uint256" },
-        ],
-        outputs: [{ name: "", type: "bool" }],
-      },
-    ],
-    functionName: "approve",
-    args: donationContract?.address ? [donationContract.address, parseEther(donationAmount || "0")] : undefined,
-    enabled: !!donationAmount && !!donationContract?.address,
-  });
-
-  const { writeAsync: approveUSDC } = useContractWrite(approveConfig);
-
-  const { config: donateConfig } = usePrepareContractWrite({
-    address: donationContract?.address,
-    abi: donationContract?.abi,
-    functionName: "donate",
-    args: [parseEther(donationAmount || "0"), donationMessage],
-    enabled: !!donationAmount && !!donationContract?.address,
-  });
-
-  const { writeAsync: donate } = useContractWrite(donateConfig);
+  // Prepare write functions
+  const { writeContractAsync } = useWriteContract();
 
   // Handle donation
   const handleDonate = async () => {
@@ -89,13 +99,24 @@ export default function EcoQuestDashboard() {
 
     try {
       setIsDonating(true);
-      
-      // First approve USDC
-      await approveUSDC?.();
-      
-      // Then donate
-      await donate?.();
-      
+      const amount = parseEther(donationAmount);
+
+      // 1️⃣ Approve USDC
+      await writeContractAsync({
+        address: USDC_ADDRESS as `0x${string}`,
+        abi: USDC_ABI,
+        functionName: "approve",
+        args: [donationContract.address, amount],
+      });
+
+      // 2️⃣ Call donate
+      await writeContractAsync({
+        address: donationContract.address as `0x${string}`,
+        abi: donationContract.abi,
+        functionName: "donate",
+        args: [amount, donationMessage],
+      });
+
       notification.success("Donation successful! Thank you for offsetting carbon!");
       setDonationAmount("");
       setDonationMessage("");
@@ -122,15 +143,15 @@ export default function EcoQuestDashboard() {
           <p className="text-lg text-gray-600">Play, Track, and Offset Your Carbon Impact</p>
         </div>
 
-        {/* Wallet Connection Status */}
+        {/* Wallet Status */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Wallet Status</h2>
           {isConnected ? (
             <div className="space-y-2">
-              <p className="text-green-600">✅ Connected: {address?.slice(0, 6)}...{address?.slice(-4)}</p>
-              <p className="text-gray-600">
-                USDC Balance: {usdcBalance ? formatEther(usdcBalance.value) : "0"} USDC
+              <p className="text-green-600">
+                ✅ Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
               </p>
+              <p className="text-gray-600">USDC Balance: {usdcBalance ? formatEther(usdcBalance.value) : "0"} USDC</p>
             </div>
           ) : (
             <p className="text-red-600">❌ Please connect your wallet to start donating</p>
@@ -139,25 +160,26 @@ export default function EcoQuestDashboard() {
 
         {/* Impact Dashboard */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Total Donations */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Donations</h3>
             <p className="text-3xl font-bold text-green-600">
-              {totalDonations ? formatEther(totalDonations) : "0"} USDC
+              {totalDonations ? formatEther(totalDonations as bigint) : "0"} USDC
             </p>
           </div>
-          
+
+          {/* Total CO2 Offset */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">CO₂ Offset</h3>
             <p className="text-3xl font-bold text-blue-600">
-              {totalCO2Offset ? formatEther(totalCO2Offset) : "0"} kg
+              {totalCO2Offset ? formatEther(totalCO2Offset as bigint) : "0"} kg
             </p>
           </div>
-          
+
+          {/* User Impact */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Your Impact</h3>
-            <p className="text-3xl font-bold text-purple-600">
-              {userStats ? formatEther(userStats.totalCO2Offset) : "0"} kg
-            </p>
+            <p className="text-3xl font-bold text-purple-600">{formatEther(userStats?.[1] ?? 0n)} kg</p>
           </div>
         </div>
 
@@ -166,13 +188,11 @@ export default function EcoQuestDashboard() {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Make a Donation</h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                USDC Amount
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">USDC Amount</label>
               <input
                 type="number"
                 value={donationAmount}
-                onChange={(e) => setDonationAmount(e.target.value)}
+                onChange={e => setDonationAmount(e.target.value)}
                 placeholder="0.00"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 disabled={!isConnected}
@@ -183,21 +203,19 @@ export default function EcoQuestDashboard() {
                 </p>
               )}
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Message (Optional)
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Message (Optional)</label>
               <textarea
                 value={donationMessage}
-                onChange={(e) => setDonationMessage(e.target.value)}
+                onChange={e => setDonationMessage(e.target.value)}
                 placeholder="Leave a message with your donation..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 rows={3}
                 disabled={!isConnected}
               />
             </div>
-            
+
             <button
               onClick={handleDonate}
               disabled={!isConnected || !donationAmount || isDonating}
@@ -207,30 +225,7 @@ export default function EcoQuestDashboard() {
             </button>
           </div>
         </div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">🎮 Play EcoQuest Game</h3>
-            <p className="text-gray-600 mb-4">
-              Explore virtual flora and fauna to earn eco-points and discover rare NFTs!
-            </p>
-            <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
-              Launch Game
-            </button>
-          </div>
-          
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">🏆 View Leaderboard</h3>
-            <p className="text-gray-600 mb-4">
-              See the top eco-contributors and their impact on carbon offset!
-            </p>
-            <button className="bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700">
-              View Rankings
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
-} 
+}
