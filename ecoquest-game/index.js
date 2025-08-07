@@ -1,3 +1,5 @@
+
+
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
@@ -10,6 +12,10 @@ for (let i = 0; i < collisions.length; i += 50) {
   collisionsMap.push(collisions.slice(i, i + 50));
 }
 
+const objectsMap = [];
+for (let i = 0; i < objectsData.length; i += 50) {
+  objectsMap.push(objectsData.slice(i, i + 50));
+}
 
 const boundaries = [];
 const offset = {
@@ -30,6 +36,23 @@ collisionsMap.forEach((row, i) => {
       );
   });
 });
+
+const objects = []
+
+objectsMap.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    if (symbol === 430)
+      objects.push(
+        new Item({
+          position: {
+            x: j * Item.width + offset.x + 30,
+            y: i * Item.height + offset.y + 30,
+          },
+        })
+      );
+  });
+});
+console.log(objects);
 
 const image = new Image();
 image.src = 'assets/ecoquest-map.png';
@@ -86,7 +109,7 @@ const keys = {
   },
 };
 
-const movables = [background, ...boundaries];
+const movables = [background, ...boundaries, ...objects];
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
@@ -97,9 +120,15 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 
+let objectInRange = null;
+
 function animate() {
   window.requestAnimationFrame(animate);
   background.draw();
+
+  objects.forEach((object) => {
+    object.draw();
+  });
 
   let moving = true;
   player.moving = false
@@ -116,6 +145,28 @@ function animate() {
       console.log('colliding');
     }
   });
+
+
+  //Interaction of player with items
+
+objectInRange = null; // reset objectInRange each frame
+for (let i = 0; i < objects.length; i++) {
+  const object = objects[i];
+  object.draw();
+
+  if (
+    rectangularCollision({
+      rectangle1: player,
+      rectangle2: object
+    })
+  ) {
+    object.highlight = true;
+    objectInRange = object; // this object can be interacted with
+  } else {
+    object.highlight = false;
+  }
+}
+  
 
   // Movement handling
   if (keys.w.pressed && lastKey === 'w') {
@@ -240,8 +291,20 @@ window.addEventListener('keydown', (e) => {
       keys.d.pressed = true;
       lastKey = 'd';
       break;
+        case ' ':
+      if (objectInRange) {
+        if (objectInRange.description) {
+          console.log(`Interacting with object: ${objectInRange.name}`);
+          console.log(`Description: ${objectInRange.description}`);
+        } else {
+          console.log(`Interacting with object: ${objectInRange.name}`);
+          console.log('No description available.');
+        }
+      }
+      break;
   }
 });
+
 
 window.addEventListener('keyup', (e) => {
   switch (e.key) {
