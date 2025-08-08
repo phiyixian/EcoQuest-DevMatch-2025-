@@ -17,13 +17,14 @@ class Item {
   static width = 64
   static height = 64
 
-  constructor({ position, name = '', description = '' }) {
+  constructor({ position, name = '', description = '' , id}) {
     this.position = position
     this.width = Item.width
     this.height = Item.height
     this.name = name
     this.description = description
     this.highlight = false
+    this.id = id
   }
 
 

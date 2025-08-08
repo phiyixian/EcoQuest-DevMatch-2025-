@@ -1,0 +1,117 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  canvas {
+    position: relative;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* === INTERACTION MODAL === */
+  #interactionModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* On top of canvas */
+  }
+  
+  #interactionModal.open {
+    display: flex;
+  }
+
+#interactionModal .modal-inner {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  color: black;
+  max-width: 500px;
+  max-height: 90vh; /* Limit modal height */
+  overflow-y: auto; /* Enable scrolling for entire modal */
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#interactionModal .info-box {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  padding: 10px;
+  flex-shrink: 0;
+}
+  
+  
+  #interactionModal .info-box {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f9f9f9;
+  }
+  
+  #interactionModal .rarity-box {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  #interactionModal img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .modal-content {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+  
+  .modal-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 2px solid #333;
+    border-radius: 8px;
+  }
+  
+  .modal-info {
+    flex: 1;
+    text-align: left;
+  }
+  
+  #interactionRarity {
+    font-weight: bold;
+    color: darkgreen;
+  }
+  
+  #interactionDescription {
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  

@@ -1,16 +1,98 @@
 <!DOCTYPE html>
 <style>
-    body{
-        background-color: black;
+    body {
+      background-color: black;
+      margin: 0;
+      font-family: sans-serif;
     }
-</style>
+  
+    canvas {
+      position: relative;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+  
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+  
+    .modal.open {
+      display: flex;
+    }
+  
+    .modal-inner {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      color: black;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+  
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+    }
+  
+    #startGame {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #008000;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
 
+  
 <canvas></canvas>
 
+<div class="modal open" id="modal">
+    <div class="modal-inner">
+      <span class="close">&times;</span>
+      <h2>Welcome to the EcoQuest Game!</h2>
+      <p>Use the w,a,s,d keys to move around and interact with objects.</p>
+      <p>Press 'Space' to interact with objects.</p>
+      <p>Have fun!</p>
+      <button id="startGame">Start Game</button>
+    </div>
+  </div>
+
+  <div id="interactionModal" class="modal">
+    <div class="modal-inner">
+      <h2 id="interactionTitle">Shiitake Mushroom</h2>
+      <img id="interactionImage" src="assets/mushroom.jpeg" alt="Shiitake Mushroom" />
+      <div class="rarity-box" id="interactionRarity">Rarity: Common</div>
+      <div class="info-box" id="interactionDescription">
+      </div>
+    </div>
+  </div>
+  
+
+
+<script src="js/interactableObjects.js"></script>
+<script src="js/tab.js"></script>
+<script src="js/quest.js"></script>
 <script src="js/collisions.js"></script>
 <script src="js/objects.js"></script>
 <script src="js/class.js"></script>
-<script src="js/interactableObjects.js"></script>
+
 <script src="index.js"></script>
 
 
