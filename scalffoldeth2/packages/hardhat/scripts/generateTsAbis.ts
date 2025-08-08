@@ -7,6 +7,7 @@
  */
 
 import * as fs from "fs";
+import path from "path";
 import prettier from "prettier";
 import { DeployFunction } from "hardhat-deploy/types";
 
@@ -17,8 +18,11 @@ const generatedContractComment = `
  */
 `;
 
-const DEPLOYMENTS_DIR = "./deployments";
-const ARTIFACTS_DIR = "./artifacts";
+//const DEPLOYMENTS_DIR = "./deployments";
+//const ARTIFACTS_DIR = "./artifacts";
+
+const DEPLOYMENTS_DIR = path.join(__dirname, "..", "deployments");
+const ARTIFACTS_DIR = path.join(__dirname, "..", "artifacts");
 
 function getDirectories(path: string) {
   return fs
@@ -76,9 +80,13 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
 }
 
 function getContractDataFromDeployments() {
-  if (!fs.existsSync(DEPLOYMENTS_DIR)) {
-    throw Error("At least one other deployment script should exist to generate an actual contract.");
-  }
+  console.log("Looking for deployments in:", DEPLOYMENTS_DIR);
+if (fs.existsSync(DEPLOYMENTS_DIR)) {
+  console.log("Found networks:", fs.readdirSync(DEPLOYMENTS_DIR));
+} else {
+  console.log("Deployments directory NOT found!");
+}
+
   const output = {} as Record<string, any>;
   for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
     const chainId = fs.readFileSync(`${DEPLOYMENTS_DIR}/${chainName}/.chainId`).toString();
@@ -94,6 +102,7 @@ function getContractDataFromDeployments() {
   }
   return output;
 }
+
 
 /**
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts

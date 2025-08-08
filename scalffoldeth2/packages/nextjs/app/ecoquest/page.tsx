@@ -1,128 +1,103 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Abi } from "viem";
-import { formatEther, parseEther } from "viem";
-import { useAccount, useBalance, useContractRead, useWriteContract } from "wagmi";
-import { useSearchParams } from "next/navigation"; // <-- Add this
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
+import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
+import { useAccount, useBalance } from "wagmi";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useSearchParams } from "next/navigation";
 import { notification } from "~~/utils/scaffold-eth";
-
-// USDC contract address on Optimism Goerli
-const USDC_ADDRESS = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
-
-// Minimal USDC ABI
-const USDC_ABI = [
-  {
-    name: "approve",
-    type: "function",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "spender", type: "address" },
-      { name: "amount", type: "uint256" },
-    ],
-    outputs: [{ name: "", type: "bool" }],
-  },
-];
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
 
 export default function EcoQuestDashboard() {
+  // Use burner wallet (automatically managed by Scaffold-ETH)
   const { address, isConnected } = useAccount();
+  
   const [donationAmount, setDonationAmount] = useState("");
   const [donationMessage, setDonationMessage] = useState("");
   const [isDonating, setIsDonating] = useState(false);
 
   const searchParams = useSearchParams();
 
+  // Get contract info for donation contract address
+  const { data: ecoQuestContract } = useDeployedContractInfo({
+  contractName: "EcoQuestDonation",
+});
+
+  // Get USDC contract info
+  const { data: usdcContract } = useDeployedContractInfo({
+    contractName: "MockUSDC",
+  });
+
+  // Contract read hooks - Using explicit typing to bypass TypeScript issues
+  const { data: totalDonations } = (useScaffoldReadContract as any)({
+    contractName: "EcoQuestDonation",
+    functionName: "totalDonations",
+  });
+
+  const { data: totalCO2Offset } = (useScaffoldReadContract as any)({
+    contractName: "EcoQuestDonation",
+    functionName: "totalCO2Offset",
+  });
+
+  const { data: userStatsRaw } = (useScaffoldReadContract as any)({
+    contractName: "EcoQuestDonation",
+    functionName: "getUserStats",
+    args: [address],
+  });
+  const userStats = userStatsRaw as [bigint, bigint] | undefined;
+
+  // USDC balance using wagmi
+  const { data: usdcBalance } = useBalance({
+    address,
+    token: usdcContract?.address,
+    query: { refetchInterval: 5000 },
+  });
+
+  // Contract write hooks - Using explicit typing to bypass TypeScript issues
+  const { writeContractAsync: writeUSDC } = (useScaffoldWriteContract as any)({
+    contractName: "MockUSDC",
+  });
+  const { writeContractAsync: writeEcoQuest } = (useScaffoldWriteContract as any)({
+    contractName: "EcoQuestDonation",
+  });
+
   // Auto-fill from Chrome Extension query params
   useEffect(() => {
     const amountParam = searchParams.get("donation");
     const msgParam = searchParams.get("message");
-    const autoDonateParam = searchParams.get("autoDonate");
-
+    // Only use donation and message params for prefill
     if (amountParam) setDonationAmount(amountParam);
     if (msgParam) setDonationMessage(decodeURIComponent(msgParam));
-
-    // If autoDonate=true and wallet is connected, trigger donation
-    if (autoDonateParam === "true" && amountParam && isConnected && !isDonating) {
-      handleDonate();
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, isConnected]);
 
-  // Get contract instances
-  const { data: donationContract } = useDeployedContractInfo("EcoQuestDonation");
-  const { data: nftContract } = useDeployedContractInfo("EcoQuestNFT");
-
-  // Read contract data
-  const { data: totalDonations } = useContractRead({
-    address: donationContract?.address,
-    abi: donationContract?.abi,
-    functionName: "totalDonations",
-    query: { refetchInterval: 5000 },
-  });
-
-  const { data: totalCO2Offset } = useContractRead({
-    address: donationContract?.address,
-    abi: donationContract?.abi,
-    functionName: "totalCO2Offset",
-    query: { refetchInterval: 5000 },
-  });
-
-  type UserStatsTuple = [bigint, bigint];
-
-  const { data } = useContractRead({
-    address: donationContract?.address,
-    abi: donationContract?.abi as Abi,
-    functionName: "getUserStats",
-    args: [address],
-    query: {
-      enabled: !!address,
-      refetchInterval: 5000,
-    },
-  });
-
-  const userStats = data as UserStatsTuple | undefined;
-
-  // USDC balance
-  const { data: usdcBalance } = useBalance({
-    address,
-    token: USDC_ADDRESS as `0x${string}`,
-    query: { refetchInterval: 5000 },
-  });
-
-  // Prepare write functions
-  const { writeContractAsync } = useWriteContract();
-
-  // Handle donation
+  // Handle donation using Scaffold-ETH hooks
   const handleDonate = async () => {
-    if (!donationAmount || !donationContract?.address) return;
-
+    if (!donationAmount || !address) return;
     try {
       setIsDonating(true);
-      const amount = parseEther(donationAmount);
+      const amount = parseUnits(donationAmount, 6); // USDC has 6 decimals
+      // Calculate CO2 offset (frontend logic: 1 USDC = 10 kg CO2)
+      const co2Offset = parseEther((parseFloat(donationAmount) * 10).toString());
 
-      // 1️⃣ Approve USDC
-      await writeContractAsync({
-        address: USDC_ADDRESS as `0x${string}`,
-        abi: USDC_ABI,
-        functionName: "approve",
-        args: [donationContract.address, amount],
+      // 1️⃣ Approve USDC using Scaffold hook
+      await writeUSDC({
+  functionName: "approve",
+  args: [ecoQuestContract?.address, amount], // Use the contract address from deployedContracts
+});
+
+      // 2️⃣ Call offset using Scaffold hook
+      await writeEcoQuest({
+        functionName: "offset",
+        args: [amount, co2Offset, donationMessage],
       });
 
-      // 2️⃣ Call donate
-      await writeContractAsync({
-        address: donationContract.address as `0x${string}`,
-        abi: donationContract.abi,
-        functionName: "donate",
-        args: [amount, donationMessage],
-      });
-
-      notification.success("Donation successful! Thank you for offsetting carbon!");
+      notification.success("Offset successful! Thank you for offsetting carbon!");
       setDonationAmount("");
       setDonationMessage("");
     } catch (error) {
-      console.error("Donation error:", error);
-      notification.error("Donation failed. Please try again.");
+      console.error("Offset error:", error);
+      notification.error("Offset failed. Please try again.");
     } finally {
       setIsDonating(false);
     }
@@ -145,17 +120,18 @@ export default function EcoQuestDashboard() {
 
         {/* Wallet Status */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Wallet Status</h2>
-          {isConnected ? (
-            <div className="space-y-2">
-              <p className="text-green-600">
-                ✅ Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
-              </p>
-              <p className="text-gray-600">USDC Balance: {usdcBalance ? formatEther(usdcBalance.value) : "0"} USDC</p>
-            </div>
-          ) : (
-            <p className="text-red-600">❌ Please connect your wallet to start donating</p>
-          )}
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Burner Wallet Status</h2>
+          <div className="space-y-2">
+            <p className="text-green-600">
+              ✅ Using Burner Wallet: {address?.slice(0, 6)}...{address?.slice(-4)}
+            </p>
+            <p className="text-gray-600">
+              USDC Balance: {usdcBalance ? formatUnits(usdcBalance.value, 6) : "0"} USDC
+            </p>
+            <p className="text-sm text-blue-600">
+              💡 This is an automatically generated burner wallet (no external wallet needed)
+            </p>
+          </div>
         </div>
 
         {/* Impact Dashboard */}
@@ -164,7 +140,7 @@ export default function EcoQuestDashboard() {
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Donations</h3>
             <p className="text-3xl font-bold text-green-600">
-              {totalDonations ? formatEther(totalDonations as bigint) : "0"} USDC
+              {totalDonations ? formatUnits(totalDonations as bigint, 6) : "0"} USDC
             </p>
           </div>
 
@@ -195,7 +171,6 @@ export default function EcoQuestDashboard() {
                 onChange={e => setDonationAmount(e.target.value)}
                 placeholder="0.00"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                disabled={!isConnected}
               />
               {donationAmount && (
                 <p className="text-sm text-gray-600 mt-1">
@@ -212,13 +187,12 @@ export default function EcoQuestDashboard() {
                 placeholder="Leave a message with your donation..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 rows={3}
-                disabled={!isConnected}
               />
             </div>
 
             <button
               onClick={handleDonate}
-              disabled={!isConnected || !donationAmount || isDonating}
+              disabled={!donationAmount || isDonating}
               className="w-full bg-green-600 text-white py-3 px-6 rounded-md font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isDonating ? "Processing..." : "Donate & Offset Carbon"}

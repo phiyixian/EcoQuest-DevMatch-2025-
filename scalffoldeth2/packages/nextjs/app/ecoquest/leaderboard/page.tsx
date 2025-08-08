@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useContractRead } from "wagmi";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
 
 // Dummy data for demo
@@ -114,7 +114,7 @@ export default function LeaderboardPage() {
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Donations</h3>
             <p className="text-3xl font-bold text-blue-600">
-              {totalDonations ? formatEther(totalDonations) : "0"} USDC
+              {totalDonations ? formatUnits(totalDonations as bigint, 6) : "0"} USDC
             </p>
           </div>
           

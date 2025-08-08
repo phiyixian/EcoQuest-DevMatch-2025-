@@ -44,26 +44,13 @@ contract MockUSDC {
         emit Transfer(from, to, amount);
         return true;
     }
-}
 
-/// @title KlimadaoDonation - Donate USDC to KlimaDAO
-contract KlimadaoDonation {
-    address public klimadao;
-    MockUSDC public usdc;
-
-    event Offset(address indexed donor, uint256 amount);
-
-    constructor(address _usdc, address _klimadao) {
-        usdc = MockUSDC(_usdc);
-        klimadao = _klimadao;
-    }
-
-    /// @notice Donate USDC to KlimaDAO
-    /// @param amount Amount in USDC's smallest unit (e.g., 1000000 = 1 USDC)
-    function offset(uint256 amount) external {
-        require(amount > 0, "Amount must be greater than zero");
-        bool success = usdc.transferFrom(msg.sender, klimadao, amount);
-        require(success, "USDC transfer failed");
-        emit Offset(msg.sender, amount);
+    // Add a transfer function for completeness (optional but standard)
+    function transfer(address to, uint256 amount) external returns (bool) {
+        require(balanceOf[msg.sender] >= amount, "Insufficient balance");
+        balanceOf[msg.sender] -= amount;
+        balanceOf[to] += amount;
+        emit Transfer(msg.sender, to, amount);
+        return true;
     }
 }
