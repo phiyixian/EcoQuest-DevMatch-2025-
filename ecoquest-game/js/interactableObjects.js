@@ -127,8 +127,8 @@ const interactionZones = [
   data: otherMushroomData
 },{
   id: 10,
-  x: 863.57 + 30,
-  y: 382.65 + 30,
+  x: 1181.99 + 30,
+  y: 509.47 + 30,
   width: 60,
   height: 60,
   data: treeData

@@ -214,6 +214,7 @@ window.addEventListener('keydown', e => {
         console.log("Interacting with:", objectInRange);
         updateInteractionTab(objectInRange);
         updateQuest(1, 1);
+        updateQuest(2, 1);
         
       } else {
         console.log("No interactable object in range.");

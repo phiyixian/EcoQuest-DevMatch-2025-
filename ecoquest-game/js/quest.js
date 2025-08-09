@@ -10,8 +10,8 @@ const quests = [
   },
   {
     id: 2,
-    name: "Collect Forest Herbs",
-    description: "Gather 5 herbs scattered around the forest.",
+    name: "Interact with 5 wildlife",
+    description: "Interact with 5 wildlife around the forest.",
     progress: 0,
     goal: 5,
     completed: false
