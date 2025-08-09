@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useAccount, useContractRead } from "wagmi";
-import { formatEther, formatUnits } from "viem";
+import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
 import { useDeployedContractInfo, useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
 type LeaderboardRow = {
@@ -51,6 +51,26 @@ export default function LeaderboardPage() {
       current.donationCount += 1;
       stats.set(donor, current);
     });
+
+    // Inject 4 comparator (fake) profiles so ranks visibly shift vs. burner wallet
+    const fakeProfiles: Array<{ address: string; usdc: string; donations: number }> = [
+      { address: "0x1111111111111111111111111111111111111111", usdc: "150.00", donations: 5 },
+      { address: "0x2222222222222222222222222222222222222222", usdc: "80.00", donations: 3 },
+      { address: "0x3333333333333333333333333333333333333333", usdc: "12.50", donations: 2 },
+      { address: "0x4444444444444444444444444444444444444444", usdc: "0.75", donations: 1 },
+    ];
+    for (const fp of fakeProfiles) {
+      if (!stats.has(fp.address)) {
+        const donated = parseUnits(fp.usdc, 6);
+        const co2 = parseEther((parseFloat(fp.usdc) * 10).toString());
+        stats.set(fp.address, {
+          address: fp.address,
+          totalDonated: donated,
+          co2Offset: co2,
+          donationCount: fp.donations,
+        });
+      }
+    }
 
     // Ensure the current burner/external wallet appears even if 0 donations
     if (address && !stats.has(address)) {
