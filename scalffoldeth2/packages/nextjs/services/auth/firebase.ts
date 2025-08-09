@@ -44,4 +44,15 @@ export const firebaseAuth: FirebaseAuthExports = (() => {
   };
 })();
 
+export const getCurrentUserEmail = (): string | undefined => {
+  try {
+    // If Firebase not configured, return undefined
+    if (!firebaseAuth.app) return undefined;
+    const auth = getAuth(firebaseAuth.app);
+    return auth?.currentUser?.email ?? undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 

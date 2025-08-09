@@ -1,3 +1,6 @@
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -12,7 +15,8 @@ export async function POST(req: NextRequest) {
       to,
       subject = "EcoQuest Donation Receipt",
       html,
-    }: { to: string; subject?: string; html: string } = body;
+      pdfBase64,
+    }: { to: string; subject?: string; html: string; pdfBase64?: string } = body;
 
     const host = process.env.SMTP_HOST || "smtp.gmail.com";
     const port = Number(process.env.SMTP_PORT || 465);
@@ -31,7 +35,17 @@ export async function POST(req: NextRequest) {
       auth: { user, pass },
     });
 
-    await transporter.sendMail({ from, to, subject, html });
+    const attachments = pdfBase64
+      ? [
+          {
+            filename: "ecoquest-receipt.pdf",
+            content: Buffer.from(pdfBase64, "base64"),
+            contentType: "application/pdf",
+          },
+        ]
+      : undefined;
+
+    await transporter.sendMail({ from, to, subject, html, attachments });
     return NextResponse.json({ ok: true });
   } catch (e: any) {
     return NextResponse.json({ error: e?.message || "Failed" }, { status: 500 });
