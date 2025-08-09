@@ -67,3 +67,47 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 Run smart contract test with `yarn hardhat:test`
 
 - Edit your smart contracts in `packages/hardhat/contracts`
+
+## Account Management
+
+EcoQuest provides several tools for managing accounts for testing and development:
+
+### Generate Account with Funding
+
+Generate a new account and automatically fund it with ETH for testing:
+
+```bash
+yarn account:generate
+```
+
+This command will:
+- Generate a new encrypted wallet
+- Prompt you for a password to encrypt the private key
+- Ask for the amount of ETH to fund the account
+- Automatically send the specified amount from the faucet account
+
+### Fund Existing Account
+
+Fund any existing account with ETH for testing:
+
+```bash
+yarn account:fund
+```
+
+This command will:
+- Prompt for the target address
+- Ask for the amount of ETH to send
+- Send the transaction from the faucet account
+
+### List Account Information
+
+View your current account details and balances:
+
+```bash
+yarn account
+```
+
+### Other Account Commands
+
+- `yarn account:import` - Import an existing private key
+- `yarn account:reveal-pk` - Reveal the private key (use with caution)
