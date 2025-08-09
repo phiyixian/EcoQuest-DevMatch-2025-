@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
 import { useAccount, useBalance } from "wagmi";
-import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldReadContract, useScaffoldWriteContract, useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 import { useSearchParams } from "next/navigation";
 import { notification } from "~~/utils/scaffold-eth";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
@@ -29,14 +29,11 @@ export default function EcoQuestDashboard() {
   });
 
   // Contract read hooks - Using explicit typing to bypass TypeScript issues
-  const { data: totalDonations } = (useScaffoldReadContract as any)({
+  // Aggregate totals from all visible contributors (same as leaderboard logic)
+  const { data: donationEvents } = useScaffoldEventHistory({
     contractName: "EcoQuestDonation",
-    functionName: "totalDonations",
-  });
-
-  const { data: totalCO2Offset } = (useScaffoldReadContract as any)({
-    contractName: "EcoQuestDonation",
-    functionName: "totalCO2Offset",
+    eventName: "DonationReceived",
+    watch: true,
   });
 
   const { data: userStatsRaw } = (useScaffoldReadContract as any)({
@@ -50,6 +47,26 @@ export default function EcoQuestDashboard() {
     donationCount: bigint;
   };
   const userStats = userStatsRaw as UserStatsResult | undefined;
+
+  // Compute community totals by summing all events and including comparator profiles
+  const computedTotals = useMemo(() => {
+    let donated: bigint = 0n;
+    let co2: bigint = 0n;
+
+    donationEvents?.forEach((ev: any) => {
+      donated += ((ev as any)?.args?.amount as bigint) ?? 0n;
+      co2 += ((ev as any)?.args?.co2Offset as bigint) ?? 0n;
+    });
+
+    // Include the same 4 comparator entries used in leaderboard
+    const fake = ["150.00", "80.00", "12.50", "0.75"]; // USDC amounts
+    for (const u of fake) {
+      donated += parseUnits(u, 6);
+      co2 += parseEther((parseFloat(u) * 10).toString());
+    }
+
+    return { donated, co2 };
+  }, [donationEvents]);
 
   // USDC balance using wagmi
   const { data: usdcBalance } = useBalance({
@@ -156,17 +173,13 @@ export default function EcoQuestDashboard() {
           {/* Total Donations */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Donations</h3>
-            <p className="text-3xl font-bold text-green-600">
-              {totalDonations ? formatUnits(totalDonations as bigint, 6) : "0"} USDC
-            </p>
+            <p className="text-3xl font-bold text-green-600">{formatUnits(computedTotals.donated, 6)} USDC</p>
           </div>
 
           {/* Total CO2 Offset */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">CO₂ Offset</h3>
-            <p className="text-3xl font-bold text-blue-600">
-              {totalCO2Offset ? formatEther(totalCO2Offset as bigint) : "0"} kg
-            </p>
+            <p className="text-3xl font-bold text-blue-600">{formatEther(computedTotals.co2)} kg</p>
           </div>
 
           {/* User Impact */}
