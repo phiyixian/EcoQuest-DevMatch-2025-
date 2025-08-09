@@ -83,6 +83,17 @@ export default function LeaderboardPage() {
     return rows;
   }, [donationEvents, address]);
 
+  // Totals computed from all entries shown in the leaderboard (includes comparators and burner wallet)
+  const computedTotals = useMemo(() => {
+    let totalDonatedAll: bigint = 0n;
+    let totalCo2All: bigint = 0n;
+    for (const row of leaderboardData) {
+      totalDonatedAll += row.totalDonated;
+      totalCo2All += row.co2Offset;
+    }
+    return { totalDonatedAll, totalCo2All };
+  }, [leaderboardData]);
+
   const getRankBadge = (rank: number) => {
     switch (rank) {
       case 1:
@@ -110,14 +121,14 @@ export default function LeaderboardPage() {
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Community Impact</h3>
             <p className="text-3xl font-bold text-green-600">
-              {totalCO2Offset ? formatEther(totalCO2Offset) : "0"} kg CO₂
+              {formatEther(computedTotals.totalCo2All)} kg CO₂
             </p>
           </div>
           
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Donations</h3>
             <p className="text-3xl font-bold text-blue-600">
-              {totalDonations ? formatUnits(totalDonations as bigint, 6) : "0"} USDC
+              {formatUnits(computedTotals.totalDonatedAll, 6)} USDC
             </p>
           </div>
           
