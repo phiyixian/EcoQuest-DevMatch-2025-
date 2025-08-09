@@ -1,12 +1,65 @@
 import { TransactionHash } from "./TransactionHash";
-import { formatEther } from "viem";
+import { formatEther, formatUnits, decodeFunctionData } from "viem";
 import { Address } from "~~/components/scaffold-eth";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { TransactionWithFunction } from "~~/utils/scaffold-eth";
 import { TransactionsTableProps } from "~~/utils/scaffold-eth/";
+import deployedContracts from "~~/contracts/deployedContracts";
 
 export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsTableProps) => {
   const { targetNetwork } = useTargetNetwork();
+
+  // Helper function to extract USDC amount from transaction
+  const getUSDCAmount = (tx: TransactionWithFunction): string => {
+    try {
+      const chainId = targetNetwork.id;
+      const contracts = deployedContracts[chainId as keyof typeof deployedContracts];
+      
+      if (!contracts) return "0";
+
+      const mockUSDC = contracts.MockUSDC;
+      const ecoQuestDonation = contracts.EcoQuestDonation;
+
+      // Check if it's a direct USDC transfer
+      if (tx.to?.toLowerCase() === mockUSDC.address.toLowerCase()) {
+        try {
+          const decoded = decodeFunctionData({
+            abi: mockUSDC.abi,
+            data: tx.input as `0x${string}`,
+          });
+
+          if (decoded.functionName === "transfer" || decoded.functionName === "transferFrom") {
+            const amount = decoded.args[decoded.args.length - 1] as bigint; // Last arg is amount
+            return formatUnits(amount, 6); // USDC has 6 decimals
+          }
+        } catch (e) {
+          // Failed to decode, continue to next check
+        }
+      }
+
+      // Check if it's an EcoQuestDonation offset function
+      if (tx.to?.toLowerCase() === ecoQuestDonation.address.toLowerCase()) {
+        try {
+          const decoded = decodeFunctionData({
+            abi: ecoQuestDonation.abi,
+            data: tx.input as `0x${string}`,
+          });
+
+          if (decoded.functionName === "offset") {
+            const amount = decoded.args[0] as bigint; // First arg is USDC amount
+            return formatUnits(amount, 6); // USDC has 6 decimals
+          }
+        } catch (e) {
+          // Failed to decode
+        }
+      }
+
+      return "0";
+    } catch (error) {
+      console.error("Error extracting USDC amount:", error);
+      return "0";
+    }
+  };
 
   return (
     <div className="flex justify-center px-4 md:px-0">
@@ -21,6 +74,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
               <th className="bg-primary">From</th>
               <th className="bg-primary">To</th>
               <th className="bg-primary text-end">Value ({targetNetwork.nativeCurrency.symbol})</th>
+              <th className="bg-primary text-end">Value (USDC)</th>
             </tr>
           </thead>
           <tbody>
@@ -29,6 +83,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                 const receipt = transactionReceipts[tx.hash];
                 const timeMined = new Date(Number(block.timestamp) * 1000).toLocaleString();
                 const functionCalled = tx.input.substring(0, 10);
+                const usdcAmount = getUSDCAmount(tx);
 
                 return (
                   <tr key={tx.hash} className="hover text-sm">
@@ -57,7 +112,10 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                       )}
                     </td>
                     <td className="text-right md:py-4">
-                      {formatEther(tx.value)} {targetNetwork.nativeCurrency.symbol}
+                      {tx.value > 0n ? `${formatEther(tx.value)} ${targetNetwork.nativeCurrency.symbol}` : "-"}
+                    </td>
+                    <td className="text-right md:py-4">
+                      {usdcAmount !== "0" ? `${usdcAmount} USDC` : "-"}
                     </td>
                   </tr>
                 );

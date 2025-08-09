@@ -65,9 +65,17 @@ export default function EcoQuestDashboard() {
   useEffect(() => {
     const amountParam = searchParams.get("donation");
     const msgParam = searchParams.get("message");
-    // Only use donation and message params for prefill
-    if (amountParam) setDonationAmount(amountParam);
-    if (msgParam) setDonationMessage(decodeURIComponent(msgParam));
+    const autoDonate = searchParams.get("autoDonate");
+    
+    // Only prefill if this is actually from the extension (has autoDonate flag)
+    if (autoDonate === "true") {
+      if (amountParam && !isNaN(parseFloat(amountParam)) && parseFloat(amountParam) > 0) {
+        setDonationAmount(amountParam);
+      }
+      if (msgParam) {
+        setDonationMessage(decodeURIComponent(msgParam));
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, isConnected]);
 
@@ -171,6 +179,7 @@ export default function EcoQuestDashboard() {
                 onChange={e => setDonationAmount(e.target.value)}
                 placeholder="0.00"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                suppressHydrationWarning
               />
               {donationAmount && (
                 <p className="text-sm text-gray-600 mt-1">
@@ -187,6 +196,7 @@ export default function EcoQuestDashboard() {
                 placeholder="Leave a message with your donation..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 rows={3}
+                suppressHydrationWarning
               />
             </div>
 
