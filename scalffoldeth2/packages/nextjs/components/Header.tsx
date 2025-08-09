@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { hardhat } from "viem/chains";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import GoogleAuthButton from "~~/components/GoogleAuthButton";
 import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
 
 type HeaderMenuLink = {
@@ -101,8 +102,9 @@ export const Header = () => {
           <HeaderMenuLinks />
         </ul>
       </div>
-      <div className="navbar-end grow mr-4">
+      <div className="navbar-end grow mr-4 flex items-center">
         <RainbowKitCustomConnectButton />
+        <GoogleAuthButton />
         {isLocalNetwork && <FaucetButton />}
       </div>
     </div>
