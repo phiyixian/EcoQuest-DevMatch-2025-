@@ -71,14 +71,18 @@ export default function EcoQuestDashboard() {
     const amountParam = searchParams.get("donation");
     const msgParam = searchParams.get("message");
     const autoDonate = searchParams.get("autoDonate");
-    
-    // Only prefill if this is actually from the extension (has autoDonate flag)
-    if (autoDonate === "true") {
+
+    // Only prefill if this is explicitly requested by the extension and wallet is connected
+    if (autoDonate === "true" && isConnected) {
       if (amountParam && !isNaN(parseFloat(amountParam)) && parseFloat(amountParam) > 0) {
         setDonationAmount(amountParam);
+      } else {
+        setDonationAmount("");
       }
       if (msgParam) {
         setDonationMessage(decodeURIComponent(msgParam));
+      } else {
+        setDonationMessage("");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -180,8 +184,18 @@ export default function EcoQuestDashboard() {
               <label className="block text-sm font-medium text-gray-700 mb-2">USDC Amount</label>
               <input
                 type="number"
+                inputMode="decimal"
+                step="0.000001"
+                min="0"
+                autoComplete="off"
                 value={donationAmount}
                 onChange={e => setDonationAmount(e.target.value)}
+                onWheel={e => (e.currentTarget as HTMLInputElement).blur()}
+                onKeyDown={e => {
+                  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                    e.preventDefault();
+                  }
+                }}
                 placeholder="0.00"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 suppressHydrationWarning
