@@ -7,8 +7,27 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   console.log("Deploying EcoQuest contracts...");
 
-  // USDC contract address on Optimism Goerli
-  const USDC_ADDRESS = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
+  let usdcAddress: string;
+  
+  // Use MockUSDC for localhost/hardhat networks, real USDC for other networks
+  if (hre.network.name === "hardhat" || hre.network.name === "localhost") {
+    console.log("Deploying MockUSDC for local testing...");
+    
+    // Deploy MockUSDC with initial supply of 1,000,000 USDC
+    const mockUSDC = await deploy("MockUSDC", {
+      from: deployer,
+      args: [1000000], // 1 million USDC initial supply
+      log: true,
+      autoMine: true,
+    });
+    
+    usdcAddress = mockUSDC.address;
+    console.log("MockUSDC deployed to:", usdcAddress);
+  } else {
+    // USDC contract address on Optimism Goerli
+    usdcAddress = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
+    console.log("Using real USDC address:", usdcAddress);
+  }
   
   // Carbon offset rate: 1 USDC = 10 kg CO2 (adjust as needed)
   const CARBON_OFFSET_RATE = "10000000000000000000"; // 10 * 10^18 (for precision)
@@ -16,7 +35,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   // Deploy EcoQuestDonation contract
   const ecoQuestDonation = await deploy("EcoQuestDonation", {
     from: deployer,
-    args: [USDC_ADDRESS, CARBON_OFFSET_RATE],
+    args: [usdcAddress, CARBON_OFFSET_RATE],
     log: true,
     autoMine: true,
   });
@@ -43,7 +62,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     try {
       await hre.run("verify:verify", {
         address: ecoQuestDonation.address,
-        constructorArguments: [USDC_ADDRESS, CARBON_OFFSET_RATE],
+        constructorArguments: [usdcAddress, CARBON_OFFSET_RATE],
       });
     } catch (error) {
       console.log("Error verifying EcoQuestDonation:", error);

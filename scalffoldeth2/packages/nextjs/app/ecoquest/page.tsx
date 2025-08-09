@@ -4,26 +4,10 @@ import { useState, useEffect } from "react";
 import type { Abi } from "viem";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useBalance, useContractRead, useWriteContract } from "wagmi";
-import { useSearchParams } from "next/navigation"; // <-- Add this
+import { useSearchParams } from "next/navigation";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
 import { notification } from "~~/utils/scaffold-eth";
-
-// USDC contract address on Optimism Goerli
-const USDC_ADDRESS = "0x7F5c764cBc14f9669B88837ca1490cCa17c31607";
-
-// Minimal USDC ABI
-const USDC_ABI = [
-  {
-    name: "approve",
-    type: "function",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "spender", type: "address" },
-      { name: "amount", type: "uint256" },
-    ],
-    outputs: [{ name: "", type: "bool" }],
-  },
-];
+import { useUsdcAddress, useUsdcAbi } from "~~/utils/scaffold-eth/getUsdcAddress";
 
 export default function EcoQuestDashboard() {
   const { address, isConnected } = useAccount();
@@ -32,6 +16,10 @@ export default function EcoQuestDashboard() {
   const [isDonating, setIsDonating] = useState(false);
 
   const searchParams = useSearchParams();
+
+  // Get USDC address and ABI based on network
+  const usdcAddress = useUsdcAddress();
+  const usdcAbi = useUsdcAbi();
 
   // Auto-fill from Chrome Extension query params
   useEffect(() => {
@@ -86,7 +74,7 @@ export default function EcoQuestDashboard() {
   // USDC balance
   const { data: usdcBalance } = useBalance({
     address,
-    token: USDC_ADDRESS as `0x${string}`,
+    token: usdcAddress,
     query: { refetchInterval: 5000 },
   });
 
@@ -95,7 +83,7 @@ export default function EcoQuestDashboard() {
 
   // Handle donation
   const handleDonate = async () => {
-    if (!donationAmount || !donationContract?.address) return;
+    if (!donationAmount || !donationContract?.address || !usdcAddress || !usdcAbi) return;
 
     try {
       setIsDonating(true);
@@ -103,8 +91,8 @@ export default function EcoQuestDashboard() {
 
       // 1️⃣ Approve USDC
       await writeContractAsync({
-        address: USDC_ADDRESS as `0x${string}`,
-        abi: USDC_ABI,
+        address: usdcAddress,
+        abi: usdcAbi,
         functionName: "approve",
         args: [donationContract.address, amount],
       });
@@ -218,7 +206,7 @@ export default function EcoQuestDashboard() {
 
             <button
               onClick={handleDonate}
-              disabled={!isConnected || !donationAmount || isDonating}
+              disabled={!isConnected || !donationAmount || isDonating || !usdcAddress}
               className="w-full bg-green-600 text-white py-3 px-6 rounded-md font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isDonating ? "Processing..." : "Donate & Offset Carbon"}
