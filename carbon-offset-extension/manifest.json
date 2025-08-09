@@ -1,18 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "Carbon Offset Tracker",
+  "name": "EcoQuest Carbon Tracker",
   "version": "1.0",
   "description": "Tracks CO₂ from browsing and lets you offset via micropayments",
   "permissions": ["storage", "tabs", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/eco-icon.png",
+      "48": "icons/eco-icon.png",
+      "128": "icons/eco-icon.png"
     }
   },
   "content_scripts": [
