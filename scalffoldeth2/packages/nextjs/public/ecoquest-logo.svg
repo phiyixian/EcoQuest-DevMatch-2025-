@@ -1,0 +1,19 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Earth/Globe -->
+  <circle cx="256" cy="320" r="120" fill="#2E86AB" stroke="none"/>
+  
+  <!-- Green landmasses on earth -->
+  <path d="M180 280 Q220 260 280 280 Q320 300 340 340 Q320 380 280 380 Q220 380 180 360 Q160 340 160 320 Q160 300 180 280 Z" fill="#A3D977"/>
+  <path d="M200 320 Q240 300 280 320 Q300 340 280 360 Q240 360 200 340 Q180 330 180 320 Q180 310 200 320 Z" fill="#A3D977"/>
+  
+  <!-- Stem -->
+  <rect x="250" y="200" width="12" height="120" fill="#5CB85C" rx="6"/>
+  
+  <!-- Left leaf -->
+  <ellipse cx="180" cy="150" rx="60" ry="35" fill="#7ED321" transform="rotate(-30 180 150)"/>
+  <path d="M140 140 Q180 130 220 140" stroke="#5CB85C" stroke-width="3" fill="none"/>
+  
+  <!-- Right leaf -->
+  <ellipse cx="350" cy="180" rx="55" ry="32" fill="#7ED321" transform="rotate(15 350 180)"/>
+  <path d="M320 170 Q350 160 380 170" stroke="#5CB85C" stroke-width="3" fill="none"/>
+</svg>
