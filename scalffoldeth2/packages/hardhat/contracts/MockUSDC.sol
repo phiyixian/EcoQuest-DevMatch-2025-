@@ -23,6 +23,7 @@ contract MockUSDC {
     event Approval(address indexed owner, address indexed spender, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
 
+    // ltr someone nid to deploy with input
     constructor(uint256 _initialSupply) {
         totalSupply = _initialSupply;
         balanceOf[msg.sender] = _initialSupply;

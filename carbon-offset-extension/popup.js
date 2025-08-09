@@ -83,7 +83,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 
   // Offset button logic
   offsetBtn.addEventListener("click", async () => {
-    const dashboardUrl = `http://192.168.56.1:3000/ecoquest?donation=${usdAmount}&message=Offset%20from%20Extension&autoDonate=true`;
+    const dashboardUrl = `http://localhost:3000/ecoquest?donation=${usdAmount}&message=Offset%20from%20Extension&autoDonate=true`;
 
     // Reset all accumulated CO2 after offset
     await setStoredCO2({});

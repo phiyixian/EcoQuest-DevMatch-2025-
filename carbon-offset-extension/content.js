@@ -113,7 +113,7 @@ function estimateCO2Fallback(domain) {
 
   // 6️⃣ Offset button
   popup.querySelector("#ecoquest-offset").addEventListener("click", async () => {
-    const dashboardUrl = `http://192.168.56.1:3000/ecoquest?donation=${usdAmount}&message=Offset%20from%20Extension&autoDonate=true`;
+    const dashboardUrl = `http://localhost:3000/ecoquest?donation=${usdAmount}&message=Offset%20from%20Extension&autoDonate=true`;
 
     // Reset all accumulated CO2 after offset
     await setStorage(STORAGE_KEY, {});

@@ -17,8 +17,7 @@ contract EcoQuestNFT is ERC721, ERC721URIStorage, Ownable {
     enum NFTType {
         DONATION_PROOF,
         RARE_DISCOVERY,
-        QUEST_COMPLETION,
-        CARBON_OFFSET
+        QUEST_COMPLETION
     }
     
     // NFT metadata
