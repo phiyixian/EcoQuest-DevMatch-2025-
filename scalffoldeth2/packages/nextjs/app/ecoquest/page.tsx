@@ -44,7 +44,12 @@ export default function EcoQuestDashboard() {
     functionName: "getUserStats",
     args: [address],
   });
-  const userStats = userStatsRaw as [bigint, bigint] | undefined;
+  type UserStatsResult = {
+    totalDonated: bigint;
+    totalCO2Offset: bigint;
+    donationCount: bigint;
+  };
+  const userStats = userStatsRaw as UserStatsResult | undefined;
 
   // USDC balance using wagmi
   const { data: usdcBalance } = useBalance({
@@ -163,7 +168,7 @@ export default function EcoQuestDashboard() {
           {/* User Impact */}
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Your Impact</h3>
-            <p className="text-3xl font-bold text-purple-600">{formatEther(userStats?.[1] ?? 0n)} kg</p>
+            <p className="text-3xl font-bold text-purple-600">{formatEther(userStats?.totalCO2Offset ?? 0n)} kg</p>
           </div>
         </div>
 
