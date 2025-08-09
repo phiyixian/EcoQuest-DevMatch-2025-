@@ -8,7 +8,7 @@ class Boundary {
   }
 
   draw() {
-    c.fillStyle = 'rgba(255, 255, 255, 0.5)';
+    c.fillStyle = 'rgba(255, 255, 255, 0)';
     c.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }
@@ -17,15 +17,19 @@ class Item {
   static width = 64
   static height = 64
 
-  constructor({ position, name = '', description = '' , id}) {
-    this.position = position
-    this.width = Item.width
-    this.height = Item.height
-    this.name = name
-    this.description = description
-    this.highlight = false
-    this.id = id
+  constructor({ position, id, name, image, rarity, data }) {
+    this.position = position;
+    this.id = id;
+    this.name = name;
+    this.image = new Image();
+    this.image.src = image;
+    this.rarity = rarity;
+    this.data = data;
+    this.width = Item.width;  // example width
+    this.height = Item.height; // example height
+    this.highlight = false;
   }
+
 
 
   draw() {

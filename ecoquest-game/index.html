@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!-- Include required libraries -->
+<script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+<script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
 <style>
     body {
       background-color: black;
@@ -63,6 +66,8 @@
   
 <canvas></canvas>
 
+<div id="playerPositionDisplay" style="position: fixed; top: 10px; left: 10px; background: rgba(255,255,255,0.8); padding: 5px; border-radius: 4px; font-family: sans-serif;"></div>
+
 <div class="modal open" id="modal">
     <div class="modal-inner">
       <span class="close">&times;</span>
@@ -74,16 +79,35 @@
     </div>
   </div>
 
-  <div id="interactionModal" class="modal">
-    <div class="modal-inner">
-      <h2 id="interactionTitle">Shiitake Mushroom</h2>
-      <img id="interactionImage" src="assets/mushroom.jpeg" alt="Shiitake Mushroom" />
-      <div class="rarity-box" id="interactionRarity">Rarity: Common</div>
-      <div class="info-box" id="interactionDescription">
-      </div>
-    </div>
+  <div id="nftModal" class="modal" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.5); z-index:1000;">
+    <button id="closeNftModal" style="float:right; font-size:20px; cursor:pointer;">&times;</button>
+    <h2 class="nft-name">NFT Name</h2>
+    <img class="nft-image" src="" alt="NFT Image" style="max-width:100%; border-radius:8px;" />
+    <p class="nft-description"></p>
   </div>
   
+  
+  <script>
+    const sponsorAmount = ethers.utils.parseUnits("10", 6); // 10 USDC with 6 decimals
+  
+    document.getElementById("approveBtn").onclick = () => approveUSDC(sponsorAmount);
+    document.getElementById("sponsorBtn").onclick = () => sponsorPool(sponsorAmount);
+    document.getElementById("offsetBtn").onclick = () => triggerOffset(sponsorAmount);
+  </script>
+  
+
+  <!-- Interaction Tab in the main page -->
+<div id="interactionTab" style="display: none; position: absolute; top: 20px; right: 20px; background: white; padding: 10px; border: 2px solid black; border-radius: 5px; width: 250px;">
+  <h3 class="interaction-name"></h3>
+  <img class="interaction-image" src="" alt="Interaction Image" style="width:100%; height:auto;">
+  <p class="interaction-rarity"></p>
+  <p class="interaction-description"></p>
+</div>
+
+<button id="mainBackButton" style="position: absolute; bottom: 20px; left: 20px; padding: 8px 14px; background: #ddd; border: none; border-radius: 5px; cursor: pointer; z-index: 1000;">
+  Back
+</button>
+
 
 
 <script src="js/interactableObjects.js"></script>
