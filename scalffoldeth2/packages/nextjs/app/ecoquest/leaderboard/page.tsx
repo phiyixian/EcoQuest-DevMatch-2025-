@@ -1,59 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useContractRead } from "wagmi";
+import { useMemo } from "react";
+import { useAccount, useContractRead } from "wagmi";
 import { formatEther, formatUnits } from "viem";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
+import { useDeployedContractInfo, useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
-// Dummy data for demo
-const dummyLeaderboard = [
-  {
-    rank: 1,
-    address: "0x1234...5678",
-    totalDonated: "150.00",
-    co2Offset: "1500.00",
-    donationCount: 5,
-    avatar: "🌱",
-  },
-  {
-    rank: 2,
-    address: "0x8765...4321",
-    totalDonated: "120.00",
-    co2Offset: "1200.00",
-    donationCount: 3,
-    avatar: "🌿",
-  },
-  {
-    rank: 3,
-    address: "0x9876...5432",
-    totalDonated: "100.00",
-    co2Offset: "1000.00",
-    donationCount: 2,
-    avatar: "🌳",
-  },
-  {
-    rank: 4,
-    address: "0x5432...9876",
-    totalDonated: "80.00",
-    co2Offset: "800.00",
-    donationCount: 4,
-    avatar: "🌲",
-  },
-  {
-    rank: 5,
-    address: "0x6789...1234",
-    totalDonated: "60.00",
-    co2Offset: "600.00",
-    donationCount: 1,
-    avatar: "🌺",
-  },
-];
+type LeaderboardRow = {
+  address: string;
+  totalDonated: bigint; // USDC 6 decimals
+  co2Offset: bigint; // in wei-like units (using formatEther for kg)
+  donationCount: number;
+};
 
 export default function LeaderboardPage() {
-  const [leaderboardData, setLeaderboardData] = useState(dummyLeaderboard);
-  const [isLoading, setIsLoading] = useState(false);
+  const { address } = useAccount();
 
-  // Get contract data
+  // Contract refs for global stats
   const { data: donationContract } = useDeployedContractInfo("EcoQuestDonation");
   const { data: totalDonations } = useContractRead({
     address: donationContract?.address,
@@ -61,7 +23,6 @@ export default function LeaderboardPage() {
     functionName: "totalDonations",
     watch: true,
   });
-
   const { data: totalCO2Offset } = useContractRead({
     address: donationContract?.address,
     abi: donationContract?.abi,
@@ -69,16 +30,38 @@ export default function LeaderboardPage() {
     watch: true,
   });
 
-  // In a real implementation, you would fetch leaderboard data from the contract
-  // For now, we'll use dummy data
-  useEffect(() => {
-    // Simulate loading real data
-    setIsLoading(true);
-    setTimeout(() => {
-      setLeaderboardData(dummyLeaderboard);
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+  // Aggregate leaderboard from DonationReceived events
+  const { data: donationEvents, isLoading } = useScaffoldEventHistory({
+    contractName: "EcoQuestDonation",
+    eventName: "DonationReceived",
+    watch: true,
+  });
+
+  const leaderboardData = useMemo<LeaderboardRow[]>(() => {
+    const stats = new Map<string, LeaderboardRow>();
+
+    donationEvents?.forEach((ev: any) => {
+      const donor = (ev as any)?.args?.donor as string | undefined;
+      const amount = ((ev as any)?.args?.amount as bigint) ?? 0n;
+      const co2 = ((ev as any)?.args?.co2Offset as bigint) ?? 0n;
+      if (!donor) return;
+      const current = stats.get(donor) ?? { address: donor, totalDonated: 0n, co2Offset: 0n, donationCount: 0 };
+      current.totalDonated += amount;
+      current.co2Offset += co2;
+      current.donationCount += 1;
+      stats.set(donor, current);
+    });
+
+    // Ensure the current burner/external wallet appears even if 0 donations
+    if (address && !stats.has(address)) {
+      stats.set(address, { address, totalDonated: 0n, co2Offset: 0n, donationCount: 0 });
+    }
+
+    const rows = Array.from(stats.values());
+    // Sort by totalDonated desc
+    rows.sort((a, b) => (a.totalDonated === b.totalDonated ? 0 : a.totalDonated > b.totalDonated ? -1 : 1));
+    return rows;
+  }, [donationEvents, address]);
 
   const getRankBadge = (rank: number) => {
     switch (rank) {
@@ -139,21 +122,21 @@ export default function LeaderboardPage() {
                 <div
                   key={index}
                   className={`flex items-center justify-between p-4 rounded-lg border ${
-                    user.rank <= 3 ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200" : "bg-gray-50 border-gray-200"
+                    index < 3 ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200" : "bg-gray-50 border-gray-200"
                   }`}
                 >
                   <div className="flex items-center space-x-4">
-                    <div className="text-2xl">{getRankBadge(user.rank)}</div>
-                    <div className="text-3xl">{user.avatar}</div>
+                    <div className="text-2xl">{getRankBadge(index + 1)}</div>
+                    <div className="text-3xl">🌱</div>
                     <div>
-                      <p className="font-semibold text-gray-800">{user.address}</p>
+                      <p className="font-semibold text-gray-800">{user.address.slice(0, 6)}...{user.address.slice(-4)}</p>
                       <p className="text-sm text-gray-600">{user.donationCount} donations</p>
                     </div>
                   </div>
                   
                   <div className="text-right">
-                    <p className="text-lg font-bold text-green-600">{user.totalDonated} USDC</p>
-                    <p className="text-sm text-gray-600">{user.co2Offset} kg CO₂ offset</p>
+                    <p className="text-lg font-bold text-green-600">{formatUnits(user.totalDonated, 6)} USDC</p>
+                    <p className="text-sm text-gray-600">{formatEther(user.co2Offset)} kg CO₂ offset</p>
                   </div>
                 </div>
               ))}
