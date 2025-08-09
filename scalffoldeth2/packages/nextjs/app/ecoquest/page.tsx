@@ -121,12 +121,33 @@ export default function EcoQuestDashboard() {
 });
 
       // 2️⃣ Call offset using Scaffold hook
-      await writeEcoQuest({
+      const tx = await writeEcoQuest({
         functionName: "offset",
         args: [amount, co2Offset, donationMessage],
       });
 
       notification.success("Offset successful! Thank you for offsetting carbon!");
+      // Fire-and-forget: generate simple HTML and POST to API route to send email
+      try {
+        const to = (typeof window !== "undefined" && localStorage.getItem("ecoquest_user_email")) || "";
+        if (to) {
+          const html = `
+            <h2>EcoQuest Donation Receipt</h2>
+            <p>Thank you for your contribution to offset carbon.</p>
+            <ul>
+              <li>Amount: ${formatUnits(amount, 6)} USDC</li>
+              <li>Estimated CO₂ offset: ${formatEther(co2Offset)} kg</li>
+              <li>Message: ${donationMessage || "-"}</li>
+            </ul>
+            <p>Tx Hash: ${String(tx)}</p>
+          `;
+          fetch("/api/send-receipt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ to, html }),
+          }).catch(() => {});
+        }
+      } catch {}
       setDonationAmount("");
       setDonationMessage("");
     } catch (error) {
@@ -142,6 +163,18 @@ export default function EcoQuestDashboard() {
     const amount = parseFloat(usdcAmount) || 0;
     return (amount * 10).toFixed(2); // 1 USDC = 10 kg CO2
   };
+
+  // Ensure a smooth start: if burner has 0 USDC and we're on localhost/hardhat, request 10 USDC from faucet
+  useEffect(() => {
+    (async () => {
+      if (!address || !usdcBalance || usdcBalance.value > 0n) return;
+      try {
+        await writeUSDC({ functionName: "faucet", args: [address, parseUnits("10", 6)] });
+        notification.info("Funded burner with 10 USDC for testing.");
+      } catch {}
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address, usdcBalance?.value]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">

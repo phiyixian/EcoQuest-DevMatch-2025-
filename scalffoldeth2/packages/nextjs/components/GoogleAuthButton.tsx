@@ -9,7 +9,14 @@ export const GoogleAuthButton = () => {
 
   useEffect(() => {
     if (!firebaseAuth.app) return;
-    return firebaseAuth.onAuthChange(setUser);
+    return firebaseAuth.onAuthChange(u => {
+      setUser(u);
+      try {
+        if (u?.email) {
+          localStorage.setItem("ecoquest_user_email", u.email);
+        }
+      } catch {}
+    });
   }, []);
 
   if (!firebaseAuth.app) {

@@ -22,6 +22,7 @@ contract MockUSDC {
 
     event Approval(address indexed owner, address indexed spender, uint256 value);
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Faucet(address indexed to, uint256 amount);
 
     constructor(uint256 _initialSupply) {
         totalSupply = _initialSupply;
@@ -51,6 +52,16 @@ contract MockUSDC {
         balanceOf[msg.sender] -= amount;
         balanceOf[to] += amount;
         emit Transfer(msg.sender, to, amount);
+        return true;
+    }
+
+    // Faucet: for local development only. Mints up to 10 USDC per call.
+    function faucet(address to, uint256 amount) external returns (bool) {
+        require(amount > 0 && amount <= 10_000_000, "max 10 USDC"); // 10 * 1e6
+        totalSupply += amount;
+        balanceOf[to] += amount;
+        emit Transfer(address(0), to, amount);
+        emit Faucet(to, amount);
         return true;
     }
 }

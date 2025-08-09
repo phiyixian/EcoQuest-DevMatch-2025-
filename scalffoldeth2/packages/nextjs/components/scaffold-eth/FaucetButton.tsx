@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createWalletClient, http, parseEther, parseUnits, encodeFunctionData } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
@@ -11,11 +12,15 @@ import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
-const NUM_OF_USDC = "1"; // 1 USDC
-const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+const NUM_OF_USDC = "10"; // 10 USDC
+const FAUCET_PRIVATE_KEY =
+  (process.env.NEXT_PUBLIC_LOCAL_FAUCET_PK as `0x${string}` | undefined) ||
+  ("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80" as const); // hardhat account[0]
+const FAUCET_ACCOUNT = privateKeyToAccount(FAUCET_PRIVATE_KEY);
 
 const localWalletClient = createWalletClient({
   chain: hardhat,
+  account: FAUCET_ACCOUNT,
   transport: http(),
 });
 
@@ -39,18 +44,18 @@ export const FaucetButton = () => {
       
       console.log("Recipient address (burner wallet):", address);
       console.log("USDC contract address:", usdcContract.address);
-      console.log("Faucet address:", FAUCET_ADDRESS);
+      console.log("Faucet address:", FAUCET_ACCOUNT.address);
       
       // Send ETH
       await faucetTxn({
-        account: FAUCET_ADDRESS,
+        account: FAUCET_ACCOUNT.address,
         to: address,
         value: parseEther(NUM_OF_ETH),
       });
 
       // Send USDC (transfer from faucet address to user)
       await faucetTxn({
-        account: FAUCET_ADDRESS,
+        account: FAUCET_ACCOUNT.address,
         to: usdcContract.address,
         data: encodeFunctionData({
           abi: usdcContract.abi,
