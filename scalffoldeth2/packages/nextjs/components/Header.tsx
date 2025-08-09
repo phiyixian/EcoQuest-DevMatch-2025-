@@ -33,6 +33,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "🎨 NFT Gallery",
     href: "/ecoquest/gallery",
   },
+  {
+    label: "👤 Profile",
+    href: "/ecoquest/profile",
+  },
 ];
 
 export const HeaderMenuLinks = () => {

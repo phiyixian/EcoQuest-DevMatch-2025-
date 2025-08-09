@@ -25,6 +25,8 @@
     "burner-connector": "0.0.16",
     "daisyui": "5.0.9",
     "firebase": "~10.13.1",
+    "jspdf": "~2.5.1",
+    "jspdf-autotable": "~3.8.2",
     "kubo-rpc-client": "~5.0.2",
     "next": "^15.4.6",
     "next-nprogress-bar": "~2.3.13",
