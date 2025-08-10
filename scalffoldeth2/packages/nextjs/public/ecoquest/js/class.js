@@ -1,5 +1,3 @@
-console.log("🎮 [DEBUG] class.js loading");
-
 class Boundary {
   static width = 64;
   static height = 64;
@@ -14,8 +12,6 @@ class Boundary {
     c.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }
-
-console.log("🎮 [DEBUG] Boundary class defined");
 
 class Item {
   static width = 64
@@ -46,8 +42,6 @@ class Item {
 
   }
 }
-
-console.log("🎮 [DEBUG] Item class defined");
 
 class Sprite {
   constructor({ position, image, frames = { max: 1 }, sprites }) {
@@ -102,8 +96,6 @@ class Sprite {
   }
 }
 
-console.log("🎮 [DEBUG] Sprite class defined");
-
 class Objects {
   static width = 64;
   static height = 64;
@@ -135,13 +127,4 @@ class Objects {
   }
 }
 
-console.log("🎮 [DEBUG] Objects class defined");
 
-// Make classes globally available
-window.Boundary = Boundary;
-window.Item = Item;
-window.Sprite = Sprite;
-window.Objects = Objects;
-
-console.log("🎮 [DEBUG] class.js loaded successfully");
-console.log("🎮 [DEBUG] Classes made globally available");
