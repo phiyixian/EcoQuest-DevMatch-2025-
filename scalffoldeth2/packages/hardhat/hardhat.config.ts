@@ -14,8 +14,7 @@ import generateTsAbis from "./scripts/generateTsAbis";
 
 const providerApiKey = process.env.ALCHEMY_API_KEY || "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 const deployerPrivateKey =
-  process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ??
-  "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
+  process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 const etherscanApiKey = process.env.ETHERSCAN_V2_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 
 const config: HardhatUserConfig = {
@@ -43,11 +42,12 @@ const config: HardhatUserConfig = {
         count: 20,
         accountsBalance: "10000000000000000000000", // 10,000 ETH
       },
-      forking: process.env.MAINNET_FORKING_ENABLED === "true"
-        ? {
-            url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
-          }
-        : undefined,
+      forking:
+        process.env.MAINNET_FORKING_ENABLED === "true"
+          ? {
+              url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
+            }
+          : undefined,
     },
 
     localhost: {

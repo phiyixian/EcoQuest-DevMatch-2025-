@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAddress, isHex, createPublicClient, http } from "viem";
+import { createPublicClient, http, isAddress, isHex } from "viem";
 import { hardhat } from "viem/chains";
 
 export const SearchBar = () => {

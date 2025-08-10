@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { useAccount, useContractRead } from "wagmi";
 import { formatEther, formatUnits, parseEther, parseUnits } from "viem";
-import { useDeployedContractInfo, useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
+import { useAccount } from "wagmi";
+import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
 type LeaderboardRow = {
   address: string;
@@ -16,19 +16,19 @@ export default function LeaderboardPage() {
   const { address } = useAccount();
 
   // Contract refs for global stats
-  const { data: donationContract } = useDeployedContractInfo("EcoQuestDonation");
-  const { data: totalDonations } = useContractRead({
-    address: donationContract?.address,
-    abi: donationContract?.abi,
-    functionName: "totalDonations",
-    watch: true,
-  });
-  const { data: totalCO2Offset } = useContractRead({
-    address: donationContract?.address,
-    abi: donationContract?.abi,
-    functionName: "totalCO2Offset",
-    watch: true,
-  });
+  // const { data: donationContract } = useDeployedContractInfo("EcoQuestDonation");
+  // const { data: totalDonations } = useContractRead({
+  //   address: donationContract?.address,
+  //   abi: donationContract?.abi,
+  //   functionName: "totalDonations",
+  //   watch: true,
+  // });
+  // const { data: totalCO2Offset } = useContractRead({
+  //   address: donationContract?.address,
+  //   abi: donationContract?.abi,
+  //   functionName: "totalCO2Offset",
+  //   watch: true,
+  // });
 
   // Aggregate leaderboard from DonationReceived events
   const { data: donationEvents, isLoading } = useScaffoldEventHistory({
@@ -120,18 +120,14 @@ export default function LeaderboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Community Impact</h3>
-            <p className="text-3xl font-bold text-green-600">
-              {formatEther(computedTotals.totalCo2All)} kg CO₂
-            </p>
+            <p className="text-3xl font-bold text-green-600">{formatEther(computedTotals.totalCo2All)} kg CO₂</p>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total Donations</h3>
-            <p className="text-3xl font-bold text-blue-600">
-              {formatUnits(computedTotals.totalDonatedAll, 6)} USDC
-            </p>
+            <p className="text-3xl font-bold text-blue-600">{formatUnits(computedTotals.totalDonatedAll, 6)} USDC</p>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Active Contributors</h3>
             <p className="text-3xl font-bold text-purple-600">{leaderboardData.length}</p>
@@ -141,7 +137,7 @@ export default function LeaderboardPage() {
         {/* Leaderboard */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">Top Contributors</h2>
-          
+
           {isLoading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
@@ -153,18 +149,22 @@ export default function LeaderboardPage() {
                 <div
                   key={index}
                   className={`flex items-center justify-between p-4 rounded-lg border ${
-                    index < 3 ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200" : "bg-gray-50 border-gray-200"
+                    index < 3
+                      ? "bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200"
+                      : "bg-gray-50 border-gray-200"
                   }`}
                 >
                   <div className="flex items-center space-x-4">
                     <div className="text-2xl">{getRankBadge(index + 1)}</div>
                     <div className="text-3xl">🌱</div>
                     <div>
-                      <p className="font-semibold text-gray-800">{user.address.slice(0, 6)}...{user.address.slice(-4)}</p>
+                      <p className="font-semibold text-gray-800">
+                        {user.address.slice(0, 6)}...{user.address.slice(-4)}
+                      </p>
                       <p className="text-sm text-gray-600">{user.donationCount} donations</p>
                     </div>
                   </div>
-                  
+
                   <div className="text-right">
                     <p className="text-lg font-bold text-green-600">{formatUnits(user.totalDonated, 6)} USDC</p>
                     <p className="text-sm text-gray-600">{formatEther(user.co2Offset)} kg CO₂ offset</p>
@@ -184,13 +184,13 @@ export default function LeaderboardPage() {
               <h4 className="font-semibold text-gray-800 mb-2">Make Donations</h4>
               <p className="text-sm text-gray-600">Donate USDC to offset carbon and earn points</p>
             </div>
-            
+
             <div className="text-center p-4 bg-blue-50 rounded-lg">
               <div className="text-2xl mb-2">🎮</div>
               <h4 className="font-semibold text-gray-800 mb-2">Play EcoQuest</h4>
               <p className="text-sm text-gray-600">Discover rare flora and fauna for bonus points</p>
             </div>
-            
+
             <div className="text-center p-4 bg-purple-50 rounded-lg">
               <div className="text-2xl mb-2">🏆</div>
               <h4 className="font-semibold text-gray-800 mb-2">Earn NFTs</h4>
@@ -211,4 +211,4 @@ export default function LeaderboardPage() {
       </div>
     </div>
   );
-} 
+}

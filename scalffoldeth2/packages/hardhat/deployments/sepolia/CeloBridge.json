@@ -1,0 +1,813 @@
+{
+  "address": "0x73b6a3d93873fe830c02134f18a4dcc269a3f0a7",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_usdcToken",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_celoRecipient",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_bridgeFee",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "celoTxHash",
+          "type": "string"
+        }
+      ],
+      "name": "BridgeCompleted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "netAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "purpose",
+          "type": "string"
+        }
+      ],
+      "name": "BridgeInitiated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum CeloBridge.BridgeStatus",
+          "name": "status",
+          "type": "uint8"
+        }
+      ],
+      "name": "BridgeStatusUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "bridgeFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bridgeTransactions",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "bridgeFee",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "netAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "purpose",
+          "type": "string"
+        },
+        {
+          "internalType": "enum CeloBridge.BridgeStatus",
+          "name": "status",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "celoTxHash",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "celoRecipient",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "emergencyWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBridgeTransaction",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "bridgeFee",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "netAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "purpose",
+              "type": "string"
+            },
+            {
+              "internalType": "enum CeloBridge.BridgeStatus",
+              "name": "status",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "celoTxHash",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct CeloBridge.BridgeTransaction",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTotalTransactions",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserTransactions",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "purpose",
+          "type": "string"
+        }
+      ],
+      "name": "initiateBridge",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalBridged",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "newFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateBridgeFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum CeloBridge.BridgeStatus",
+          "name": "status",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "celoTxHash",
+          "type": "string"
+        }
+      ],
+      "name": "updateBridgeStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newRecipient",
+          "type": "address"
+        }
+      ],
+      "name": "updateCeloRecipient",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "usdcToken",
+      "outputs": [
+        {
+          "internalType": "contract MockUSDC",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "userTransactions",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xc7ed7e15adaf227fe10ac7e233fdd6b976b7188d79c79ab4a62c99b80b7bfcd0",
+  "receipt": {
+    "to": null,
+    "from": "0x2878e154820a6a6ae190109036266b02ba46de05",
+    "contractAddress": "0x73b6a3d93873fe830c02134f18a4dcc269a3f0a7",
+    "transactionIndex": "0xd5",
+    "gasUsed": "0x15a1ba",
+    "logsBloom": "0x00040000000020000000008000000000000000000008000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002400000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x75643d5ec204f47018b65b6c2aca6f6222f23037b5949e45e2399d055fb2e1cd",
+    "transactionHash": "0xc7ed7e15adaf227fe10ac7e233fdd6b976b7188d79c79ab4a62c99b80b7bfcd0",
+    "logs": [
+      {
+        "address": "0x73b6a3d93873fe830c02134f18a4dcc269a3f0a7",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x0000000000000000000000002878e154820a6a6ae190109036266b02ba46de05"
+        ],
+        "data": "0x",
+        "blockHash": "0x75643d5ec204f47018b65b6c2aca6f6222f23037b5949e45e2399d055fb2e1cd",
+        "blockNumber": "0x8895d3",
+        "blockTimestamp": "0x6898128c",
+        "transactionHash": "0xc7ed7e15adaf227fe10ac7e233fdd6b976b7188d79c79ab4a62c99b80b7bfcd0",
+        "transactionIndex": "0xd5",
+        "logIndex": "0x112e",
+        "removed": false
+      }
+    ],
+    "blockNumber": "0x8895d3",
+    "cumulativeGasUsed": "0x3519fbf",
+    "status": "0x1"
+  },
+  "args": [
+    "0x87A112538420C9FcC183707488d065cB8e16Cc3c",
+    "0x0000000000000000000000000000000000000001",
+    50
+  ],
+  "numDeployments": 2,
+  "solcInputHash": "496b2371263bb80f5e1277e0675ff2b1",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_usdcToken\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_celoRecipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_bridgeFee\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"celoTxHash\",\"type\":\"string\"}],\"name\":\"BridgeCompleted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"netAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"purpose\",\"type\":\"string\"}],\"name\":\"BridgeInitiated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"enum CeloBridge.BridgeStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"BridgeStatusUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"bridgeFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bridgeTransactions\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bridgeFee\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"netAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"purpose\",\"type\":\"string\"},{\"internalType\":\"enum CeloBridge.BridgeStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"celoTxHash\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"celoRecipient\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"emergencyWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"}],\"name\":\"getBridgeTransaction\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bridgeFee\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"netAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"purpose\",\"type\":\"string\"},{\"internalType\":\"enum CeloBridge.BridgeStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"celoTxHash\",\"type\":\"string\"}],\"internalType\":\"struct CeloBridge.BridgeTransaction\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getTotalTransactions\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getUserTransactions\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"purpose\",\"type\":\"string\"}],\"name\":\"initiateBridge\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalBridged\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newFee\",\"type\":\"uint256\"}],\"name\":\"updateBridgeFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"},{\"internalType\":\"enum CeloBridge.BridgeStatus\",\"name\":\"status\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"celoTxHash\",\"type\":\"string\"}],\"name\":\"updateBridgeStatus\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newRecipient\",\"type\":\"address\"}],\"name\":\"updateCeloRecipient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"usdcToken\",\"outputs\":[{\"internalType\":\"contract MockUSDC\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"userTransactions\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdrawFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Manages cross-chain carbon offset transactions to Celo network This contract handles USDC deposits and initiates bridging to Celo for carbon projects\",\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"emergencyWithdraw(address,uint256)\":{\"details\":\"Emergency withdraw (only owner)\"},\"getBridgeTransaction(uint256)\":{\"details\":\"Get bridge transaction details\"},\"getTotalTransactions()\":{\"details\":\"Get total number of bridge transactions\"},\"getUserTransactions(address)\":{\"details\":\"Get user's bridge transaction history\"},\"initiateBridge(uint256,string)\":{\"details\":\"Initiate a bridge transaction to Celo network\",\"params\":{\"amount\":\"USDC amount to bridge\",\"purpose\":\"Purpose of the carbon offset\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"},\"updateBridgeFee(uint256)\":{\"details\":\"Update bridge fee (only owner)\"},\"updateBridgeStatus(uint256,uint8,string)\":{\"details\":\"Update bridge transaction status (called by oracle in production)\"},\"updateCeloRecipient(address)\":{\"details\":\"Update Celo recipient address (only owner)\"},\"withdrawFees(address,uint256)\":{\"details\":\"Withdraw accumulated fees (only owner)\"}},\"title\":\"CeloBridge\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/CeloBridge.sol\":\"CeloBridge\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"contracts/CeloBridge.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.20;\\n\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\nimport \\\"./MockUSDC.sol\\\";\\n\\n/**\\n * @title CeloBridge\\n * @dev Manages cross-chain carbon offset transactions to Celo network\\n * This contract handles USDC deposits and initiates bridging to Celo for carbon projects\\n */\\ncontract CeloBridge is Ownable {\\n    MockUSDC public usdcToken;\\n\\n    // Celo network configuration\\n    address public celoRecipient; // Celo address that receives funds for carbon projects\\n    uint256 public bridgeFee; // Fee for bridging (in basis points, e.g., 100 = 1%)\\n\\n    // Transaction tracking\\n    struct BridgeTransaction {\\n        address user;\\n        uint256 amount;\\n        uint256 bridgeFee;\\n        uint256 netAmount;\\n        uint256 timestamp;\\n        string purpose;\\n        BridgeStatus status;\\n        string celoTxHash; // Celo transaction hash (set by oracle/backend)\\n    }\\n\\n    enum BridgeStatus {\\n        PENDING,\\n        BRIDGED,\\n        COMPLETED,\\n        FAILED\\n    }\\n\\n    // Events\\n    event BridgeInitiated(\\n        uint256 indexed transactionId,\\n        address indexed user,\\n        uint256 amount,\\n        uint256 netAmount,\\n        string purpose\\n    );\\n\\n    event BridgeCompleted(uint256 indexed transactionId, string celoTxHash);\\n\\n    event BridgeStatusUpdated(uint256 indexed transactionId, BridgeStatus status);\\n\\n    // Storage\\n    mapping(uint256 => BridgeTransaction) public bridgeTransactions;\\n    mapping(address => uint256[]) public userTransactions;\\n    uint256 private _transactionIds;\\n    uint256 public totalBridged;\\n\\n    // Reentrancy guard\\n    bool private _reentrancyGuard;\\n\\n    modifier nonReentrant() {\\n        require(!_reentrancyGuard, \\\"ReentrancyGuard: reentrant call\\\");\\n        _reentrancyGuard = true;\\n        _;\\n        _reentrancyGuard = false;\\n    }\\n\\n    constructor(address _usdcToken, address _celoRecipient, uint256 _bridgeFee) Ownable(msg.sender) {\\n        usdcToken = MockUSDC(_usdcToken);\\n        celoRecipient = _celoRecipient;\\n        bridgeFee = _bridgeFee; // e.g., 50 = 0.5%\\n    }\\n\\n    /**\\n     * @dev Initiate a bridge transaction to Celo network\\n     * @param amount USDC amount to bridge\\n     * @param purpose Purpose of the carbon offset\\n     */\\n    function initiateBridge(uint256 amount, string memory purpose) external nonReentrant returns (uint256) {\\n        require(amount > 0, \\\"Amount must be greater than 0\\\");\\n        require(bytes(purpose).length > 0, \\\"Purpose required\\\");\\n\\n        // Calculate bridge fee and net amount\\n        uint256 feeAmount = (amount * bridgeFee) / 10000;\\n        uint256 netAmount = amount - feeAmount;\\n\\n        // Transfer USDC from user to this contract\\n        bool success = usdcToken.transferFrom(msg.sender, address(this), amount);\\n        require(success, \\\"USDC transfer failed\\\");\\n\\n        // Create bridge transaction record\\n        _transactionIds++;\\n        uint256 transactionId = _transactionIds;\\n\\n        bridgeTransactions[transactionId] = BridgeTransaction({\\n            user: msg.sender,\\n            amount: amount,\\n            bridgeFee: feeAmount,\\n            netAmount: netAmount,\\n            timestamp: block.timestamp,\\n            purpose: purpose,\\n            status: BridgeStatus.PENDING,\\n            celoTxHash: \\\"\\\"\\n        });\\n\\n        userTransactions[msg.sender].push(transactionId);\\n        totalBridged += netAmount;\\n\\n        emit BridgeInitiated(transactionId, msg.sender, amount, netAmount, purpose);\\n\\n        // In a real implementation, here you would:\\n        // 1. Lock the USDC tokens\\n        // 2. Emit an event that a bridge oracle/relayer would listen to\\n        // 3. The oracle would then mint equivalent tokens on Celo\\n        // For this demo, we'll simulate immediate bridging\\n        _simulateBridge(transactionId);\\n\\n        return transactionId;\\n    }\\n\\n    /**\\n     * @dev Simulate bridge completion (in production, this would be called by oracle)\\n     */\\n    function _simulateBridge(uint256 transactionId) private {\\n        bridgeTransactions[transactionId].status = BridgeStatus.BRIDGED;\\n\\n        // Simulate Celo transaction hash\\n        string memory simulatedCeloTx = string(\\n            abi.encodePacked(\\\"0xcelo\\\", _uint2str(transactionId), _uint2str(block.timestamp))\\n        );\\n\\n        bridgeTransactions[transactionId].celoTxHash = simulatedCeloTx;\\n\\n        emit BridgeCompleted(transactionId, simulatedCeloTx);\\n        emit BridgeStatusUpdated(transactionId, BridgeStatus.BRIDGED);\\n    }\\n\\n    /**\\n     * @dev Update bridge transaction status (called by oracle in production)\\n     */\\n    function updateBridgeStatus(\\n        uint256 transactionId,\\n        BridgeStatus status,\\n        string memory celoTxHash\\n    ) external onlyOwner {\\n        require(transactionId > 0 && transactionId <= _transactionIds, \\\"Invalid transaction ID\\\");\\n\\n        bridgeTransactions[transactionId].status = status;\\n        if (bytes(celoTxHash).length > 0) {\\n            bridgeTransactions[transactionId].celoTxHash = celoTxHash;\\n        }\\n\\n        emit BridgeStatusUpdated(transactionId, status);\\n        if (bytes(celoTxHash).length > 0) {\\n            emit BridgeCompleted(transactionId, celoTxHash);\\n        }\\n    }\\n\\n    /**\\n     * @dev Get user's bridge transaction history\\n     */\\n    function getUserTransactions(address user) external view returns (uint256[] memory) {\\n        return userTransactions[user];\\n    }\\n\\n    /**\\n     * @dev Get bridge transaction details\\n     */\\n    function getBridgeTransaction(uint256 transactionId) external view returns (BridgeTransaction memory) {\\n        require(transactionId > 0 && transactionId <= _transactionIds, \\\"Invalid transaction ID\\\");\\n        return bridgeTransactions[transactionId];\\n    }\\n\\n    /**\\n     * @dev Get total number of bridge transactions\\n     */\\n    function getTotalTransactions() external view returns (uint256) {\\n        return _transactionIds;\\n    }\\n\\n    /**\\n     * @dev Update bridge fee (only owner)\\n     */\\n    function updateBridgeFee(uint256 newFee) external onlyOwner {\\n        require(newFee <= 1000, \\\"Fee cannot exceed 10%\\\"); // Max 10%\\n        bridgeFee = newFee;\\n    }\\n\\n    /**\\n     * @dev Update Celo recipient address (only owner)\\n     */\\n    function updateCeloRecipient(address newRecipient) external onlyOwner {\\n        require(newRecipient != address(0), \\\"Invalid recipient\\\");\\n        celoRecipient = newRecipient;\\n    }\\n\\n    /**\\n     * @dev Withdraw accumulated fees (only owner)\\n     */\\n    function withdrawFees(address to, uint256 amount) external onlyOwner {\\n        require(to != address(0), \\\"Invalid recipient\\\");\\n        bool success = usdcToken.transfer(to, amount);\\n        require(success, \\\"Transfer failed\\\");\\n    }\\n\\n    /**\\n     * @dev Emergency withdraw (only owner)\\n     */\\n    function emergencyWithdraw(address to, uint256 amount) external onlyOwner {\\n        require(to != address(0), \\\"Invalid recipient\\\");\\n        bool success = usdcToken.transfer(to, amount);\\n        require(success, \\\"Transfer failed\\\");\\n    }\\n\\n    /**\\n     * @dev Convert uint to string\\n     */\\n    function _uint2str(uint256 _i) internal pure returns (string memory) {\\n        if (_i == 0) {\\n            return \\\"0\\\";\\n        }\\n        uint256 j = _i;\\n        uint256 len;\\n        while (j != 0) {\\n            len++;\\n            j /= 10;\\n        }\\n        bytes memory bstr = new bytes(len);\\n        uint256 k = len;\\n        while (_i != 0) {\\n            k = k - 1;\\n            uint8 temp = (48 + uint8(_i - (_i / 10) * 10));\\n            bytes1 b1 = bytes1(temp);\\n            bstr[k] = b1;\\n            _i /= 10;\\n        }\\n        return string(bstr);\\n    }\\n}\\n\",\"keccak256\":\"0xb9ed0fa7b941100775ddc59d83d9bfa10a5f321025164a9d9aa5a5dff41743d4\",\"license\":\"MIT\"},\"contracts/MockUSDC.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\n/*Frontend tip:\\n    Can make the user experience smoother by:\\n    1. User only input donation amount once (not in both approve() and offset()\\n            Asking the user for the donation amount once,\\n            Then, in your frontend code, call approve(spender, amount) and\\n            offset(amount) with the same value.\\n    2. User nonid to input klimadao_contract address\\n            Hardcode or configure the KlimadaoDonation contract address in your frontend code \\n            (for example, in a config file or as a constant).*/\\n\\n/// @title MockUSDC - Simple ERC20 Token for Testing\\ncontract MockUSDC {\\n    string public name = \\\"Mock USDC\\\";\\n    string public symbol = \\\"mUSDC\\\";\\n    uint8 public decimals = 6;\\n    uint256 public totalSupply;\\n    mapping(address => uint256) public balanceOf;\\n    mapping(address => mapping(address => uint256)) public allowance;\\n\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    constructor(uint256 _initialSupply) {\\n        totalSupply = _initialSupply;\\n        balanceOf[msg.sender] = _initialSupply;\\n        emit Transfer(address(0), msg.sender, _initialSupply);\\n    }\\n\\n    function approve(address spender, uint256 amount) external returns (bool) {\\n        allowance[msg.sender][spender] = amount;\\n        emit Approval(msg.sender, spender, amount);\\n        return true;\\n    }\\n\\n    function transferFrom(address from, address to, uint256 amount) external returns (bool) {\\n        require(balanceOf[from] >= amount, \\\"Insufficient balance\\\");\\n        require(allowance[from][msg.sender] >= amount, \\\"Allowance exceeded\\\");\\n        balanceOf[from] -= amount;\\n        balanceOf[to] += amount;\\n        allowance[from][msg.sender] -= amount;\\n        emit Transfer(from, to, amount);\\n        return true;\\n    }\\n\\n    // Add a transfer function for completeness (optional but standard)\\n    function transfer(address to, uint256 amount) external returns (bool) {\\n        require(balanceOf[msg.sender] >= amount, \\\"Insufficient balance\\\");\\n        balanceOf[msg.sender] -= amount;\\n        balanceOf[to] += amount;\\n        emit Transfer(msg.sender, to, amount);\\n        return true;\\n    }\\n}\\n\",\"keccak256\":\"0x3f95b30a63903d81026f041fa8433f3a4bf6b4d3b610f09925f59d9de8f5eb4e\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60806040523480156200001157600080fd5b506040516200184e3803806200184e83398101604081905262000034916200010d565b33806200005b57604051631e4fbdf760e01b81526000600482015260240160405180910390fd5b6200006681620000a0565b50600180546001600160a01b039485166001600160a01b03199182161790915560028054939094169216919091179091556003556200014e565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b80516001600160a01b03811681146200010857600080fd5b919050565b6000806000606084860312156200012357600080fd5b6200012e84620000f0565b92506200013e60208501620000f0565b9150604084015190509250925092565b6116f0806200015e6000396000f3fe608060405234801561001057600080fd5b50600436106101165760003560e01c806395ccea67116100a2578063b842ec4411610071578063b842ec441461020d578063bde9456614610220578063ef92539914610233578063f2fde38b14610253578063f73cf99c1461026657600080fd5b806395ccea67146101df578063ad3b1b47146101df578063b4f26c01146101f2578063b5c604ff1461020557600080fd5b806367a1791a116100e957806367a1791a146101a1578063715018a6146101aa57806381f3aece146101b257806382b12dd7146101c55780638da5cb5b146101ce57600080fd5b806311eac8551461011b578063423662c61461014b5780635a1c03661461016c5780635b09c5b314610181575b600080fd5b60015461012e906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b61015e610159366004611113565b61028d565b604051908152602001610142565b61017f61017a36600461115a565b61060c565b005b61019461018f36600461115a565b610663565b60405161014291906111fb565b61015e60075481565b61017f61087b565b61017f6101c03660046112a9565b61088f565b61015e60035481565b6000546001600160a01b031661012e565b61017f6101ed3660046112cb565b610903565b60025461012e906001600160a01b031681565b60065461015e565b61015e61021b3660046112cb565b610a13565b61017f61022e3660046112f5565b610a44565b6102466102413660046112a9565b610b76565b6040516101429190611352565b61017f6102613660046112a9565b610be2565b61027961027436600461115a565b610c20565b604051610142989796959493929190611396565b60085460009060ff16156102e85760405162461bcd60e51b815260206004820152601f60248201527f5265656e7472616e637947756172643a207265656e7472616e742063616c6c0060448201526064015b60405180910390fd5b6008805460ff19166001179055826103425760405162461bcd60e51b815260206004820152601d60248201527f416d6f756e74206d7573742062652067726561746572207468616e203000000060448201526064016102df565b60008251116103865760405162461bcd60e51b815260206004820152601060248201526f141d5c9c1bdcd9481c995c5d5a5c995960821b60448201526064016102df565b6000612710600354856103999190611416565b6103a39190611433565b905060006103b18286611455565b6001546040516323b872dd60e01b8152336004820152306024820152604481018890529192506000916001600160a01b03909116906323b872dd906064016020604051808303816000875af115801561040e573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104329190611468565b9050806104785760405162461bcd60e51b81526020600482015260146024820152731554d110c81d1c985b9cd9995c8819985a5b195960621b60448201526064016102df565b600680549060006104888361148a565b9091555050600654604080516101008101825233815260208082018a815282840188815260608401888152426080860190815260a086018d8152600060c0880181905288518088018a5281815260e089015289815260049687905297909720865181546001600160a01b0319166001600160a01b039091161781559351600185015591516002840155516003830155519181019190915591519091906005820190610533908261152b565b5060c082015160068201805460ff19166001836003811115610557576105576111c3565b021790555060e08201516007820190610570908261152b565b50503360009081526005602090815260408220805460018101825590835290822001839055600780548693509091906105aa9084906115eb565b9091555050604051339082907fb2c6b88b0d1f1dc3d08148fdd9513e1b7728a0c0115ef20d9c128798255757ed906105e7908b9088908c906115fe565b60405180910390a36105f881610d88565b6008805460ff191690559695505050505050565b610614610e68565b6103e881111561065e5760405162461bcd60e51b81526020600482015260156024820152744665652063616e6e6f74206578636565642031302560581b60448201526064016102df565b600355565b61066b611011565b60008211801561067d57506006548211155b6106c25760405162461bcd60e51b8152602060048201526016602482015275125b9d985b1a59081d1c985b9cd858dd1a5bdb88125160521b60448201526064016102df565b60008281526004602081815260409283902083516101008101855281546001600160a01b031681526001820154928101929092526002810154938201939093526003830154606082015290820154608082015260058201805491929160a08401919061072d906114a3565b80601f0160208091040260200160405190810160405280929190818152602001828054610759906114a3565b80156107a65780601f1061077b576101008083540402835291602001916107a6565b820191906000526020600020905b81548152906001019060200180831161078957829003601f168201915b5050509183525050600682015460209091019060ff1660038111156107cd576107cd6111c3565b60038111156107de576107de6111c3565b81526020016007820180546107f2906114a3565b80601f016020809104026020016040519081016040528092919081815260200182805461081e906114a3565b801561086b5780601f106108405761010080835404028352916020019161086b565b820191906000526020600020905b81548152906001019060200180831161084e57829003601f168201915b5050505050815250509050919050565b610883610e68565b61088d6000610e95565b565b610897610e68565b6001600160a01b0381166108e15760405162461bcd60e51b8152602060048201526011602482015270125b9d985b1a59081c9958da5c1a595b9d607a1b60448201526064016102df565b600280546001600160a01b0319166001600160a01b0392909216919091179055565b61090b610e68565b6001600160a01b0382166109555760405162461bcd60e51b8152602060048201526011602482015270125b9d985b1a59081c9958da5c1a595b9d607a1b60448201526064016102df565b60015460405163a9059cbb60e01b81526001600160a01b03848116600483015260248201849052600092169063a9059cbb906044016020604051808303816000875af11580156109a9573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109cd9190611468565b905080610a0e5760405162461bcd60e51b815260206004820152600f60248201526e151c985b9cd9995c8819985a5b1959608a1b60448201526064016102df565b505050565b60056020528160005260406000208181548110610a2f57600080fd5b90600052602060002001600091509150505481565b610a4c610e68565b600083118015610a5e57506006548311155b610aa35760405162461bcd60e51b8152602060048201526016602482015275125b9d985b1a59081d1c985b9cd858dd1a5bdb88125160521b60448201526064016102df565b6000838152600460205260409020600601805483919060ff19166001836003811115610ad157610ad16111c3565b0217905550805115610afa576000838152600460205260409020600701610af8828261152b565b505b827f4e41a2208cb3bd51fb09dadf618dfb47c1af834e64717684d5e97d073fc999f783604051610b2a9190611626565b60405180910390a2805115610a0e57827f921663d97f8d3c87c7931e672657c85d3365fb4d49ee7182e3390cf6bc3fe65482604051610b699190611634565b60405180910390a2505050565b6001600160a01b038116600090815260056020908152604091829020805483518184028101840190945280845260609392830182828015610bd657602002820191906000526020600020905b815481526020019060010190808311610bc2575b50505050509050919050565b610bea610e68565b6001600160a01b038116610c1457604051631e4fbdf760e01b8152600060048201526024016102df565b610c1d81610e95565b50565b60046020819052600091825260409091208054600182015460028301546003840154948401546005850180546001600160a01b039095169693959294919291610c68906114a3565b80601f0160208091040260200160405190810160405280929190818152602001828054610c94906114a3565b8015610ce15780601f10610cb657610100808354040283529160200191610ce1565b820191906000526020600020905b815481529060010190602001808311610cc457829003601f168201915b5050506006840154600785018054949560ff909216949193509150610d05906114a3565b80601f0160208091040260200160405190810160405280929190818152602001828054610d31906114a3565b8015610d7e5780601f10610d5357610100808354040283529160200191610d7e565b820191906000526020600020905b815481529060010190602001808311610d6157829003601f168201915b5050505050905088565b6000818152600460205260408120600601805460ff19166001179055610dad82610ee5565b610db642610ee5565b604051602001610dc7929190611647565b60408051601f198184030181529181526000848152600460205220909150600701610df2828261152b565b50817f921663d97f8d3c87c7931e672657c85d3365fb4d49ee7182e3390cf6bc3fe65482604051610e239190611634565b60405180910390a2817f4e41a2208cb3bd51fb09dadf618dfb47c1af834e64717684d5e97d073fc999f76001604051610e5c9190611626565b60405180910390a25050565b6000546001600160a01b0316331461088d5760405163118cdaa760e01b81523360048201526024016102df565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b606081600003610f0c5750506040805180820190915260018152600360fc1b602082015290565b8160005b8115610f365780610f208161148a565b9150610f2f9050600a83611433565b9150610f10565b60008167ffffffffffffffff811115610f5157610f51611070565b6040519080825280601f01601f191660200182016040528015610f7b576020820181803683370190505b509050815b851561100857610f91600182611455565b90506000610fa0600a88611433565b610fab90600a611416565b610fb59088611455565b610fc090603061168b565b905060008160f81b905080848481518110610fdd57610fdd6116a4565b60200101906001600160f81b031916908160001a905350610fff600a89611433565b97505050610f80565b50949350505050565b60405180610100016040528060006001600160a01b03168152602001600081526020016000815260200160008152602001600081526020016060815260200160006003811115611063576110636111c3565b8152602001606081525090565b634e487b7160e01b600052604160045260246000fd5b600082601f83011261109757600080fd5b813567ffffffffffffffff808211156110b2576110b2611070565b604051601f8301601f19908116603f011681019082821181831017156110da576110da611070565b816040528381528660208588010111156110f357600080fd5b836020870160208301376000602085830101528094505050505092915050565b6000806040838503121561112657600080fd5b82359150602083013567ffffffffffffffff81111561114457600080fd5b61115085828601611086565b9150509250929050565b60006020828403121561116c57600080fd5b5035919050565b60005b8381101561118e578181015183820152602001611176565b50506000910152565b600081518084526111af816020860160208601611173565b601f01601f19169290920160200192915050565b634e487b7160e01b600052602160045260246000fd5b600481106111f757634e487b7160e01b600052602160045260246000fd5b9052565b6020815260018060a01b038251166020820152602082015160408201526040820151606082015260608201516080820152608082015160a0820152600060a08301516101008060c0850152611254610120850183611197565b915060c085015161126860e08601826111d9565b5060e0850151848303601f1901828601526112838382611197565b9695505050505050565b80356001600160a01b03811681146112a457600080fd5b919050565b6000602082840312156112bb57600080fd5b6112c48261128d565b9392505050565b600080604083850312156112de57600080fd5b6112e78361128d565b946020939093013593505050565b60008060006060848603121561130a57600080fd5b8335925060208401356004811061132057600080fd5b9150604084013567ffffffffffffffff81111561133c57600080fd5b61134886828701611086565b9150509250925092565b6020808252825182820181905260009190848201906040850190845b8181101561138a5783518352928401929184019160010161136e565b50909695505050505050565b600061010060018060a01b038b1683528960208401528860408401528760608401528660808401528060a08401526113d081840187611197565b90506113df60c08401866111d9565b82810360e08401526113f18185611197565b9b9a5050505050505050505050565b634e487b7160e01b600052601160045260246000fd5b808202811582820484141761142d5761142d611400565b92915050565b60008261145057634e487b7160e01b600052601260045260246000fd5b500490565b8181038181111561142d5761142d611400565b60006020828403121561147a57600080fd5b815180151581146112c457600080fd5b60006001820161149c5761149c611400565b5060010190565b600181811c908216806114b757607f821691505b6020821081036114d757634e487b7160e01b600052602260045260246000fd5b50919050565b601f821115610a0e57600081815260208120601f850160051c810160208610156115045750805b601f850160051c820191505b8181101561152357828155600101611510565b505050505050565b815167ffffffffffffffff81111561154557611545611070565b6115598161155384546114a3565b846114dd565b602080601f83116001811461158e57600084156115765750858301515b600019600386901b1c1916600185901b178555611523565b600085815260208120601f198616915b828110156115bd5788860151825594840194600190910190840161159e565b50858210156115db5787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b8082018082111561142d5761142d611400565b83815282602082015260606040820152600061161d6060830184611197565b95945050505050565b6020810161142d82846111d9565b6020815260006112c46020830184611197565b65307863656c6f60d01b815260008351611668816006850160208801611173565b83519083019061167f816006840160208801611173565b01600601949350505050565b60ff818116838216019081111561142d5761142d611400565b634e487b7160e01b600052603260045260246000fdfea264697066735822122081f5258a7eb46e2cec62aada28fc2bbfd32b3de7b1143150f615d0fe69fe24fd64736f6c63430008140033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101165760003560e01c806395ccea67116100a2578063b842ec4411610071578063b842ec441461020d578063bde9456614610220578063ef92539914610233578063f2fde38b14610253578063f73cf99c1461026657600080fd5b806395ccea67146101df578063ad3b1b47146101df578063b4f26c01146101f2578063b5c604ff1461020557600080fd5b806367a1791a116100e957806367a1791a146101a1578063715018a6146101aa57806381f3aece146101b257806382b12dd7146101c55780638da5cb5b146101ce57600080fd5b806311eac8551461011b578063423662c61461014b5780635a1c03661461016c5780635b09c5b314610181575b600080fd5b60015461012e906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b61015e610159366004611113565b61028d565b604051908152602001610142565b61017f61017a36600461115a565b61060c565b005b61019461018f36600461115a565b610663565b60405161014291906111fb565b61015e60075481565b61017f61087b565b61017f6101c03660046112a9565b61088f565b61015e60035481565b6000546001600160a01b031661012e565b61017f6101ed3660046112cb565b610903565b60025461012e906001600160a01b031681565b60065461015e565b61015e61021b3660046112cb565b610a13565b61017f61022e3660046112f5565b610a44565b6102466102413660046112a9565b610b76565b6040516101429190611352565b61017f6102613660046112a9565b610be2565b61027961027436600461115a565b610c20565b604051610142989796959493929190611396565b60085460009060ff16156102e85760405162461bcd60e51b815260206004820152601f60248201527f5265656e7472616e637947756172643a207265656e7472616e742063616c6c0060448201526064015b60405180910390fd5b6008805460ff19166001179055826103425760405162461bcd60e51b815260206004820152601d60248201527f416d6f756e74206d7573742062652067726561746572207468616e203000000060448201526064016102df565b60008251116103865760405162461bcd60e51b815260206004820152601060248201526f141d5c9c1bdcd9481c995c5d5a5c995960821b60448201526064016102df565b6000612710600354856103999190611416565b6103a39190611433565b905060006103b18286611455565b6001546040516323b872dd60e01b8152336004820152306024820152604481018890529192506000916001600160a01b03909116906323b872dd906064016020604051808303816000875af115801561040e573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104329190611468565b9050806104785760405162461bcd60e51b81526020600482015260146024820152731554d110c81d1c985b9cd9995c8819985a5b195960621b60448201526064016102df565b600680549060006104888361148a565b9091555050600654604080516101008101825233815260208082018a815282840188815260608401888152426080860190815260a086018d8152600060c0880181905288518088018a5281815260e089015289815260049687905297909720865181546001600160a01b0319166001600160a01b039091161781559351600185015591516002840155516003830155519181019190915591519091906005820190610533908261152b565b5060c082015160068201805460ff19166001836003811115610557576105576111c3565b021790555060e08201516007820190610570908261152b565b50503360009081526005602090815260408220805460018101825590835290822001839055600780548693509091906105aa9084906115eb565b9091555050604051339082907fb2c6b88b0d1f1dc3d08148fdd9513e1b7728a0c0115ef20d9c128798255757ed906105e7908b9088908c906115fe565b60405180910390a36105f881610d88565b6008805460ff191690559695505050505050565b610614610e68565b6103e881111561065e5760405162461bcd60e51b81526020600482015260156024820152744665652063616e6e6f74206578636565642031302560581b60448201526064016102df565b600355565b61066b611011565b60008211801561067d57506006548211155b6106c25760405162461bcd60e51b8152602060048201526016602482015275125b9d985b1a59081d1c985b9cd858dd1a5bdb88125160521b60448201526064016102df565b60008281526004602081815260409283902083516101008101855281546001600160a01b031681526001820154928101929092526002810154938201939093526003830154606082015290820154608082015260058201805491929160a08401919061072d906114a3565b80601f0160208091040260200160405190810160405280929190818152602001828054610759906114a3565b80156107a65780601f1061077b576101008083540402835291602001916107a6565b820191906000526020600020905b81548152906001019060200180831161078957829003601f168201915b5050509183525050600682015460209091019060ff1660038111156107cd576107cd6111c3565b60038111156107de576107de6111c3565b81526020016007820180546107f2906114a3565b80601f016020809104026020016040519081016040528092919081815260200182805461081e906114a3565b801561086b5780601f106108405761010080835404028352916020019161086b565b820191906000526020600020905b81548152906001019060200180831161084e57829003601f168201915b5050505050815250509050919050565b610883610e68565b61088d6000610e95565b565b610897610e68565b6001600160a01b0381166108e15760405162461bcd60e51b8152602060048201526011602482015270125b9d985b1a59081c9958da5c1a595b9d607a1b60448201526064016102df565b600280546001600160a01b0319166001600160a01b0392909216919091179055565b61090b610e68565b6001600160a01b0382166109555760405162461bcd60e51b8152602060048201526011602482015270125b9d985b1a59081c9958da5c1a595b9d607a1b60448201526064016102df565b60015460405163a9059cbb60e01b81526001600160a01b03848116600483015260248201849052600092169063a9059cbb906044016020604051808303816000875af11580156109a9573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109cd9190611468565b905080610a0e5760405162461bcd60e51b815260206004820152600f60248201526e151c985b9cd9995c8819985a5b1959608a1b60448201526064016102df565b505050565b60056020528160005260406000208181548110610a2f57600080fd5b90600052602060002001600091509150505481565b610a4c610e68565b600083118015610a5e57506006548311155b610aa35760405162461bcd60e51b8152602060048201526016602482015275125b9d985b1a59081d1c985b9cd858dd1a5bdb88125160521b60448201526064016102df565b6000838152600460205260409020600601805483919060ff19166001836003811115610ad157610ad16111c3565b0217905550805115610afa576000838152600460205260409020600701610af8828261152b565b505b827f4e41a2208cb3bd51fb09dadf618dfb47c1af834e64717684d5e97d073fc999f783604051610b2a9190611626565b60405180910390a2805115610a0e57827f921663d97f8d3c87c7931e672657c85d3365fb4d49ee7182e3390cf6bc3fe65482604051610b699190611634565b60405180910390a2505050565b6001600160a01b038116600090815260056020908152604091829020805483518184028101840190945280845260609392830182828015610bd657602002820191906000526020600020905b815481526020019060010190808311610bc2575b50505050509050919050565b610bea610e68565b6001600160a01b038116610c1457604051631e4fbdf760e01b8152600060048201526024016102df565b610c1d81610e95565b50565b60046020819052600091825260409091208054600182015460028301546003840154948401546005850180546001600160a01b039095169693959294919291610c68906114a3565b80601f0160208091040260200160405190810160405280929190818152602001828054610c94906114a3565b8015610ce15780601f10610cb657610100808354040283529160200191610ce1565b820191906000526020600020905b815481529060010190602001808311610cc457829003601f168201915b5050506006840154600785018054949560ff909216949193509150610d05906114a3565b80601f0160208091040260200160405190810160405280929190818152602001828054610d31906114a3565b8015610d7e5780601f10610d5357610100808354040283529160200191610d7e565b820191906000526020600020905b815481529060010190602001808311610d6157829003601f168201915b5050505050905088565b6000818152600460205260408120600601805460ff19166001179055610dad82610ee5565b610db642610ee5565b604051602001610dc7929190611647565b60408051601f198184030181529181526000848152600460205220909150600701610df2828261152b565b50817f921663d97f8d3c87c7931e672657c85d3365fb4d49ee7182e3390cf6bc3fe65482604051610e239190611634565b60405180910390a2817f4e41a2208cb3bd51fb09dadf618dfb47c1af834e64717684d5e97d073fc999f76001604051610e5c9190611626565b60405180910390a25050565b6000546001600160a01b0316331461088d5760405163118cdaa760e01b81523360048201526024016102df565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b606081600003610f0c5750506040805180820190915260018152600360fc1b602082015290565b8160005b8115610f365780610f208161148a565b9150610f2f9050600a83611433565b9150610f10565b60008167ffffffffffffffff811115610f5157610f51611070565b6040519080825280601f01601f191660200182016040528015610f7b576020820181803683370190505b509050815b851561100857610f91600182611455565b90506000610fa0600a88611433565b610fab90600a611416565b610fb59088611455565b610fc090603061168b565b905060008160f81b905080848481518110610fdd57610fdd6116a4565b60200101906001600160f81b031916908160001a905350610fff600a89611433565b97505050610f80565b50949350505050565b60405180610100016040528060006001600160a01b03168152602001600081526020016000815260200160008152602001600081526020016060815260200160006003811115611063576110636111c3565b8152602001606081525090565b634e487b7160e01b600052604160045260246000fd5b600082601f83011261109757600080fd5b813567ffffffffffffffff808211156110b2576110b2611070565b604051601f8301601f19908116603f011681019082821181831017156110da576110da611070565b816040528381528660208588010111156110f357600080fd5b836020870160208301376000602085830101528094505050505092915050565b6000806040838503121561112657600080fd5b82359150602083013567ffffffffffffffff81111561114457600080fd5b61115085828601611086565b9150509250929050565b60006020828403121561116c57600080fd5b5035919050565b60005b8381101561118e578181015183820152602001611176565b50506000910152565b600081518084526111af816020860160208601611173565b601f01601f19169290920160200192915050565b634e487b7160e01b600052602160045260246000fd5b600481106111f757634e487b7160e01b600052602160045260246000fd5b9052565b6020815260018060a01b038251166020820152602082015160408201526040820151606082015260608201516080820152608082015160a0820152600060a08301516101008060c0850152611254610120850183611197565b915060c085015161126860e08601826111d9565b5060e0850151848303601f1901828601526112838382611197565b9695505050505050565b80356001600160a01b03811681146112a457600080fd5b919050565b6000602082840312156112bb57600080fd5b6112c48261128d565b9392505050565b600080604083850312156112de57600080fd5b6112e78361128d565b946020939093013593505050565b60008060006060848603121561130a57600080fd5b8335925060208401356004811061132057600080fd5b9150604084013567ffffffffffffffff81111561133c57600080fd5b61134886828701611086565b9150509250925092565b6020808252825182820181905260009190848201906040850190845b8181101561138a5783518352928401929184019160010161136e565b50909695505050505050565b600061010060018060a01b038b1683528960208401528860408401528760608401528660808401528060a08401526113d081840187611197565b90506113df60c08401866111d9565b82810360e08401526113f18185611197565b9b9a5050505050505050505050565b634e487b7160e01b600052601160045260246000fd5b808202811582820484141761142d5761142d611400565b92915050565b60008261145057634e487b7160e01b600052601260045260246000fd5b500490565b8181038181111561142d5761142d611400565b60006020828403121561147a57600080fd5b815180151581146112c457600080fd5b60006001820161149c5761149c611400565b5060010190565b600181811c908216806114b757607f821691505b6020821081036114d757634e487b7160e01b600052602260045260246000fd5b50919050565b601f821115610a0e57600081815260208120601f850160051c810160208610156115045750805b601f850160051c820191505b8181101561152357828155600101611510565b505050505050565b815167ffffffffffffffff81111561154557611545611070565b6115598161155384546114a3565b846114dd565b602080601f83116001811461158e57600084156115765750858301515b600019600386901b1c1916600185901b178555611523565b600085815260208120601f198616915b828110156115bd5788860151825594840194600190910190840161159e565b50858210156115db5787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b8082018082111561142d5761142d611400565b83815282602082015260606040820152600061161d6060830184611197565b95945050505050565b6020810161142d82846111d9565b6020815260006112c46020830184611197565b65307863656c6f60d01b815260008351611668816006850160208801611173565b83519083019061167f816006840160208801611173565b01600601949350505050565b60ff818116838216019081111561142d5761142d611400565b634e487b7160e01b600052603260045260246000fdfea264697066735822122081f5258a7eb46e2cec62aada28fc2bbfd32b3de7b1143150f615d0fe69fe24fd64736f6c63430008140033",
+  "devdoc": {
+    "details": "Manages cross-chain carbon offset transactions to Celo network This contract handles USDC deposits and initiates bridging to Celo for carbon projects",
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "emergencyWithdraw(address,uint256)": {
+        "details": "Emergency withdraw (only owner)"
+      },
+      "getBridgeTransaction(uint256)": {
+        "details": "Get bridge transaction details"
+      },
+      "getTotalTransactions()": {
+        "details": "Get total number of bridge transactions"
+      },
+      "getUserTransactions(address)": {
+        "details": "Get user's bridge transaction history"
+      },
+      "initiateBridge(uint256,string)": {
+        "details": "Initiate a bridge transaction to Celo network",
+        "params": {
+          "amount": "USDC amount to bridge",
+          "purpose": "Purpose of the carbon offset"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      },
+      "updateBridgeFee(uint256)": {
+        "details": "Update bridge fee (only owner)"
+      },
+      "updateBridgeStatus(uint256,uint8,string)": {
+        "details": "Update bridge transaction status (called by oracle in production)"
+      },
+      "updateCeloRecipient(address)": {
+        "details": "Update Celo recipient address (only owner)"
+      },
+      "withdrawFees(address,uint256)": {
+        "details": "Withdraw accumulated fees (only owner)"
+      }
+    },
+    "title": "CeloBridge",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 8,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 3535,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "usdcToken",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_contract(MockUSDC)5668"
+      },
+      {
+        "astId": 3537,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "celoRecipient",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_address"
+      },
+      {
+        "astId": 3539,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "bridgeFee",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 3592,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "bridgeTransactions",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_uint256,t_struct(BridgeTransaction)3557_storage)"
+      },
+      {
+        "astId": 3597,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "userTransactions",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)"
+      },
+      {
+        "astId": 3599,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "_transactionIds",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 3601,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "totalBridged",
+        "offset": 0,
+        "slot": "7",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 3603,
+        "contract": "contracts/CeloBridge.sol:CeloBridge",
+        "label": "_reentrancyGuard",
+        "offset": 0,
+        "slot": "8",
+        "type": "t_bool"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_uint256)dyn_storage": {
+        "base": "t_uint256",
+        "encoding": "dynamic_array",
+        "label": "uint256[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_contract(MockUSDC)5668": {
+        "encoding": "inplace",
+        "label": "contract MockUSDC",
+        "numberOfBytes": "20"
+      },
+      "t_enum(BridgeStatus)3562": {
+        "encoding": "inplace",
+        "label": "enum CeloBridge.BridgeStatus",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256[])",
+        "numberOfBytes": "32",
+        "value": "t_array(t_uint256)dyn_storage"
+      },
+      "t_mapping(t_uint256,t_struct(BridgeTransaction)3557_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct CeloBridge.BridgeTransaction)",
+        "numberOfBytes": "32",
+        "value": "t_struct(BridgeTransaction)3557_storage"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(BridgeTransaction)3557_storage": {
+        "encoding": "inplace",
+        "label": "struct CeloBridge.BridgeTransaction",
+        "members": [
+          {
+            "astId": 3541,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "user",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 3543,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "amount",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 3545,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "bridgeFee",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 3547,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "netAmount",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 3549,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "timestamp",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 3551,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "purpose",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 3554,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "status",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_enum(BridgeStatus)3562"
+          },
+          {
+            "astId": 3556,
+            "contract": "contracts/CeloBridge.sol:CeloBridge",
+            "label": "celoTxHash",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_string_storage"
+          }
+        ],
+        "numberOfBytes": "256"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { createWalletClient, http, parseEther, parseUnits, encodeFunctionData } from "viem";
+import { createWalletClient, encodeFunctionData, http, parseEther, parseUnits } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
-import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
+import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 
 // Number of ETH faucet sends to an address
 const NUM_OF_ETH = "1";
@@ -36,11 +36,11 @@ export const FaucetButton = () => {
     if (!address || !usdcContract) return;
     try {
       setLoading(true);
-      
+
       console.log("Recipient address (burner wallet):", address);
       console.log("USDC contract address:", usdcContract.address);
       console.log("Faucet address:", FAUCET_ADDRESS);
-      
+
       // Send ETH
       await faucetTxn({
         account: FAUCET_ADDRESS,

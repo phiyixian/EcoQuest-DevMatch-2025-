@@ -1,5 +1,5 @@
-import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, type User } from "firebase/auth";
+import { type FirebaseApp, getApps, initializeApp } from "firebase/app";
+import { GoogleAuthProvider, type User, getAuth, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 
 export type FirebaseAuthExports = {
   app: FirebaseApp | null;
@@ -43,5 +43,3 @@ export const firebaseAuth: FirebaseAuthExports = (() => {
     onAuthChange: cb => onAuthStateChanged(auth, cb),
   };
 })();
-
-

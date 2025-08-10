@@ -1,0 +1,42 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/EcoQuestCollection.sol": {
+      "content": "\r\n"
+    },
+    "contracts/EcoQuestDonation.sol": {
+      "content": "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.20;\r\n\r\nimport \"./MockUSDC.sol\";\r\n\r\n/**\r\n * @title EcoQuestDonation\r\n * @dev Manages carbon offset donations and tracking\r\n */\r\ncontract EcoQuestDonation {\r\n    MockUSDC public usdcToken;\r\n    address public klimadao;\r\n    \r\n    // Total donations received\r\n    uint256 public totalDonations;\r\n    \r\n    // Total CO2 offset (in kg)\r\n    uint256 public totalCO2Offset;\r\n    \r\n    // Donation struct\r\n    struct Donation {\r\n        address donor;\r\n        uint256 amount;\r\n        uint256 co2Offset;\r\n        uint256 timestamp;\r\n        string message;\r\n    }\r\n    \r\n    // User stats\r\n    struct UserStats {\r\n        uint256 totalDonated;\r\n        uint256 totalCO2Offset;\r\n        uint256 donationCount;\r\n    }\r\n    \r\n    // Events\r\n    event DonationReceived(\r\n        address indexed donor,\r\n        uint256 amount,\r\n        uint256 co2Offset,\r\n        string message\r\n    );\r\n    \r\n    //\r\n    \r\n    // Mappings\r\n    mapping(address => UserStats) public userStats;\r\n    mapping(uint256 => Donation) public donations;\r\n    uint256 private _donationIds;\r\n    \r\n    constructor(address _usdcToken, address _klimadao) {\r\n        usdcToken = MockUSDC(_usdcToken);\r\n        klimadao = _klimadao;\r\n    }\r\n    \r\n    function offset(uint256 amount, uint256 co2Offset, string memory message) external {\r\n        require(amount > 0, \"Amount must be greater than 0\");\r\n        require(co2Offset > 0, \"CO2 offset must be greater than 0\");\r\n        bool success = usdcToken.transferFrom(msg.sender, klimadao, amount);\r\n        require(success, \"USDC transfer failed\");\r\n\r\n        _donationIds++;\r\n        uint256 donationId = _donationIds;\r\n\r\n        donations[donationId] = Donation({\r\n            donor: msg.sender,\r\n            amount: amount,\r\n            co2Offset: co2Offset,\r\n            timestamp: block.timestamp,\r\n            message: message\r\n        });\r\n\r\n        userStats[msg.sender].totalDonated += amount;\r\n        userStats[msg.sender].totalCO2Offset += co2Offset;\r\n        userStats[msg.sender].donationCount++;\r\n\r\n        totalDonations += amount;\r\n        totalCO2Offset += co2Offset;\r\n\r\n        emit DonationReceived(msg.sender, amount, co2Offset, message);\r\n    }\r\n    \r\n    function getUserStats(address user) external view returns (UserStats memory) {\r\n        return userStats[user];\r\n    }\r\n\r\n    function getDonation(uint256 donationId) external view returns (Donation memory) {\r\n        require(donationId > 0 && donationId <= _donationIds, \"Invalid donation ID\");\r\n        return donations[donationId];\r\n    }\r\n\r\n    function getTotalDonations() external view returns (uint256) {\r\n        return _donationIds;\r\n    }\r\n}"
+    },
+    "contracts/MockUSDC.sol": {
+      "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\n/*Frontend tip:\r\n    Can make the user experience smoother by:\r\n    1. User only input donation amount once (not in both approve() and offset()\r\n            Asking the user for the donation amount once,\r\n            Then, in your frontend code, call approve(spender, amount) and\r\n            offset(amount) with the same value.\r\n    2. User nonid to input klimadao_contract address\r\n            Hardcode or configure the KlimadaoDonation contract address in your frontend code \r\n            (for example, in a config file or as a constant).*/\r\n\r\n/// @title MockUSDC - Simple ERC20 Token for Testing\r\ncontract MockUSDC {\r\n    string public name = \"Mock USDC\";\r\n    string public symbol = \"mUSDC\";\r\n    uint8 public decimals = 6;\r\n    uint256 public totalSupply;\r\n    mapping(address => uint256) public balanceOf;\r\n    mapping(address => mapping(address => uint256)) public allowance;\r\n\r\n    event Approval(address indexed owner, address indexed spender, uint256 value);\r\n    event Transfer(address indexed from, address indexed to, uint256 value);\r\n    event Faucet(address indexed to, uint256 amount);\r\n\r\n    constructor(uint256 _initialSupply) {\r\n        totalSupply = _initialSupply;\r\n        balanceOf[msg.sender] = _initialSupply;\r\n        emit Transfer(address(0), msg.sender, _initialSupply);\r\n    }\r\n\r\n    function approve(address spender, uint256 amount) external returns (bool) {\r\n        allowance[msg.sender][spender] = amount;\r\n        emit Approval(msg.sender, spender, amount);\r\n        return true;\r\n    }\r\n\r\n    function transferFrom(address from, address to, uint256 amount) external returns (bool) {\r\n        require(balanceOf[from] >= amount, \"Insufficient balance\");\r\n        require(allowance[from][msg.sender] >= amount, \"Allowance exceeded\");\r\n        balanceOf[from] -= amount;\r\n        balanceOf[to] += amount;\r\n        allowance[from][msg.sender] -= amount;\r\n        emit Transfer(from, to, amount);\r\n        return true;\r\n    }\r\n\r\n    // Add a transfer function for completeness (optional but standard)\r\n    function transfer(address to, uint256 amount) external returns (bool) {\r\n        require(balanceOf[msg.sender] >= amount, \"Insufficient balance\");\r\n        balanceOf[msg.sender] -= amount;\r\n        balanceOf[to] += amount;\r\n        emit Transfer(msg.sender, to, amount);\r\n        return true;\r\n    }\r\n\r\n    // Faucet: for local development only. Mints up to 10 USDC per call.\r\n    function faucet(address to, uint256 amount) external returns (bool) {\r\n        require(amount > 0 && amount <= 10_000_000, \"max 10 USDC\"); // 10 * 1e6\r\n        totalSupply += amount;\r\n        balanceOf[to] += amount;\r\n        emit Transfer(address(0), to, amount);\r\n        emit Faucet(to, amount);\r\n        return true;\r\n    }\r\n}"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

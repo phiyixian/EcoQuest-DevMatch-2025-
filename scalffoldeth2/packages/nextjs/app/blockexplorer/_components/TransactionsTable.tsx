@@ -1,20 +1,21 @@
 import { TransactionHash } from "./TransactionHash";
-import { formatEther, formatUnits, decodeFunctionData } from "viem";
+import { decodeFunctionData, formatEther, formatUnits } from "viem";
 import { Address } from "~~/components/scaffold-eth";
+import deployedContracts from "~~/contracts/deployedContracts";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
 import { TransactionWithFunction } from "~~/utils/scaffold-eth";
 import { TransactionsTableProps } from "~~/utils/scaffold-eth/";
-import deployedContracts from "~~/contracts/deployedContracts";
 
 export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsTableProps) => {
   const { targetNetwork } = useTargetNetwork();
 
-  // Helper function to extract USDC amount from transaction
+  // Helper function to extrac
+  // t USDC amount from transaction
   const getUSDCAmount = (tx: TransactionWithFunction): string => {
     try {
       const chainId = targetNetwork.id;
       const contracts = deployedContracts[chainId as keyof typeof deployedContracts];
-      
+
       if (!contracts) return "0";
 
       const mockUSDC = contracts.MockUSDC;
@@ -32,7 +33,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
             const amount = decoded.args[decoded.args.length - 1] as bigint; // Last arg is amount
             return formatUnits(amount, 6); // USDC has 6 decimals
           }
-        } catch (e) {
+        } catch {
           // Failed to decode, continue to next check
         }
       }
@@ -49,7 +50,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
             const amount = decoded.args[0] as bigint; // First arg is USDC amount
             return formatUnits(amount, 6); // USDC has 6 decimals
           }
-        } catch (e) {
+        } catch {
           // Failed to decode
         }
       }
@@ -114,9 +115,7 @@ export const TransactionsTable = ({ blocks, transactionReceipts }: TransactionsT
                     <td className="text-right md:py-4">
                       {tx.value > 0n ? `${formatEther(tx.value)} ${targetNetwork.nativeCurrency.symbol}` : "-"}
                     </td>
-                    <td className="text-right md:py-4">
-                      {usdcAmount !== "0" ? `${usdcAmount} USDC` : "-"}
-                    </td>
+                    <td className="text-right md:py-4">{usdcAmount !== "0" ? `${usdcAmount} USDC` : "-"}</td>
                   </tr>
                 );
               }),

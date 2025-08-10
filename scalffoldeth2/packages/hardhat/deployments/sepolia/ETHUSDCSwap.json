@@ -1,0 +1,438 @@
+{
+  "address": "0x4842f80Bb9E646E0e6a7A00c5a95c4b0bBfe2E1a",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_usdcToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_exchangeRate",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "ethAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "usdcAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ETHSwappedForUSDC",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ETHWithdrawn",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "ExchangeRateUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "USDCWithdrawn",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "ethAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "calculateUSDCAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "emergencyWithdrawETH",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "emergencyWithdrawUSDC",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "exchangeRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "fundWithUSDC",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getContractETHBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getContractUSDCBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getExchangeRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "swapETHForUSDC",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateExchangeRate",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "usdcToken",
+      "outputs": [
+        {
+          "internalType": "contract MockUSDC",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawETH",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawUSDC",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0x59ccce6fcc36cb5c9b40ed919de707e3b47a41f992aae4b188c62052c02314f1",
+  "receipt": {
+    "to": null,
+    "from": "0x2878e154820a6A6AE190109036266b02bA46DE05",
+    "contractAddress": "0x4842f80Bb9E646E0e6a7A00c5a95c4b0bBfe2E1a",
+    "transactionIndex": 115,
+    "gasUsed": "810510",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x764354427b87ce52de014de3b4960008294cad9408b3357ba74e12b62989f811",
+    "transactionHash": "0x59ccce6fcc36cb5c9b40ed919de707e3b47a41f992aae4b188c62052c02314f1",
+    "logs": [],
+    "blockNumber": 8952325,
+    "cumulativeGasUsed": "13473733",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x87A112538420C9FcC183707488d065cB8e16Cc3c",
+    "2000000000"
+  ],
+  "numDeployments": 2,
+  "solcInputHash": "a3003d6c8ccce0822ed152d48417970e",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_usdcToken\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_exchangeRate\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"ethAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"usdcAmount\",\"type\":\"uint256\"}],\"name\":\"ETHSwappedForUSDC\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"ETHWithdrawn\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newRate\",\"type\":\"uint256\"}],\"name\":\"ExchangeRateUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"USDCWithdrawn\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"ethAmount\",\"type\":\"uint256\"}],\"name\":\"calculateUSDCAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"emergencyWithdrawETH\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"emergencyWithdrawUSDC\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"exchangeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"fundWithUSDC\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getContractETHBalance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getContractUSDCBalance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getExchangeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"swapETHForUSDC\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newRate\",\"type\":\"uint256\"}],\"name\":\"updateExchangeRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"usdcToken\",\"outputs\":[{\"internalType\":\"contract MockUSDC\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdrawETH\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"withdrawUSDC\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"details\":\"A simple contract that allows users to swap ETH for USDC at a fixed rate\",\"kind\":\"dev\",\"methods\":{\"calculateUSDCAmount(uint256)\":{\"details\":\"Calculate how much USDC you would get for a given amount of ETH\",\"params\":{\"ethAmount\":\"The amount of ETH (in wei)\"},\"returns\":{\"_0\":\"The amount of USDC (with 6 decimals)\"}},\"emergencyWithdrawETH()\":{\"details\":\"Emergency withdraw all ETH (owner only)\"},\"emergencyWithdrawUSDC()\":{\"details\":\"Emergency withdraw all USDC (owner only)\"},\"fundWithUSDC(uint256)\":{\"details\":\"Fund the contract with USDC (owner only)\",\"params\":{\"amount\":\"The amount of USDC to add to the contract\"}},\"getContractETHBalance()\":{\"details\":\"Get the contract's current ETH balance\",\"returns\":{\"_0\":\"The ETH balance of this contract\"}},\"getContractUSDCBalance()\":{\"details\":\"Get the contract's current USDC balance\",\"returns\":{\"_0\":\"The USDC balance of this contract\"}},\"getExchangeRate()\":{\"details\":\"Get the current exchange rate\",\"returns\":{\"_0\":\"The amount of USDC (with 6 decimals) per 1 ETH\"}},\"swapETHForUSDC()\":{\"details\":\"Swap ETH for USDC at the current exchange rate\"},\"transferOwnership(address)\":{\"details\":\"Transfer ownership (owner only)\",\"params\":{\"newOwner\":\"The new owner address\"}},\"updateExchangeRate(uint256)\":{\"details\":\"Update the exchange rate (owner only)\",\"params\":{\"_newRate\":\"The new exchange rate (USDC per ETH with 6 decimals)\"}},\"withdrawETH(uint256)\":{\"details\":\"Withdraw ETH from the contract (owner only)\",\"params\":{\"amount\":\"The amount of ETH to withdraw (in wei)\"}},\"withdrawUSDC(uint256)\":{\"details\":\"Withdraw USDC from the contract (owner only)\",\"params\":{\"amount\":\"The amount of USDC to withdraw\"}}},\"title\":\"ETH to USDC Swap Contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"swapETHForUSDC()\":{\"notice\":\"Sends ETH and receives USDC in return\"}},\"notice\":\"This is for testnet demonstration purposes\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/ETHUSDCSwap.sol\":\"ETHUSDCSwap\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/ETHUSDCSwap.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./MockUSDC.sol\\\";\\n\\n/**\\n * @title ETH to USDC Swap Contract\\n * @dev A simple contract that allows users to swap ETH for USDC at a fixed rate\\n * @notice This is for testnet demonstration purposes\\n */\\ncontract ETHUSDCSwap {\\n    MockUSDC public usdcToken;\\n    address public owner;\\n    uint256 public exchangeRate; // How much USDC per 1 ETH (in wei)\\n\\n    event ETHSwappedForUSDC(address indexed user, uint256 ethAmount, uint256 usdcAmount);\\n\\n    event ExchangeRateUpdated(uint256 newRate);\\n    event USDCWithdrawn(address indexed owner, uint256 amount);\\n    event ETHWithdrawn(address indexed owner, uint256 amount);\\n\\n    modifier onlyOwner() {\\n        require(msg.sender == owner, \\\"Only owner can call this function\\\");\\n        _;\\n    }\\n\\n    constructor(address _usdcToken, uint256 _exchangeRate) {\\n        usdcToken = MockUSDC(_usdcToken);\\n        owner = msg.sender;\\n        exchangeRate = _exchangeRate; // e.g., 2000 * 10^6 for 2000 USDC per ETH\\n    }\\n\\n    /**\\n     * @dev Swap ETH for USDC at the current exchange rate\\n     * @notice Sends ETH and receives USDC in return\\n     */\\n    function swapETHForUSDC() external payable {\\n        require(msg.value > 0, \\\"Must send ETH to swap\\\");\\n\\n        // Calculate USDC amount to give\\n        // exchangeRate is USDC per ETH (with 6 decimals for USDC)\\n        uint256 usdcAmount = (msg.value * exchangeRate) / 1e18;\\n\\n        // Check if contract has enough USDC\\n        require(usdcToken.balanceOf(address(this)) >= usdcAmount, \\\"Insufficient USDC in contract\\\");\\n\\n        // Transfer USDC to user\\n        require(usdcToken.transfer(msg.sender, usdcAmount), \\\"USDC transfer failed\\\");\\n\\n        emit ETHSwappedForUSDC(msg.sender, msg.value, usdcAmount);\\n    }\\n\\n    /**\\n     * @dev Get the current exchange rate\\n     * @return The amount of USDC (with 6 decimals) per 1 ETH\\n     */\\n    function getExchangeRate() external view returns (uint256) {\\n        return exchangeRate;\\n    }\\n\\n    /**\\n     * @dev Calculate how much USDC you would get for a given amount of ETH\\n     * @param ethAmount The amount of ETH (in wei)\\n     * @return The amount of USDC (with 6 decimals)\\n     */\\n    function calculateUSDCAmount(uint256 ethAmount) external view returns (uint256) {\\n        return (ethAmount * exchangeRate) / 1e18;\\n    }\\n\\n    /**\\n     * @dev Get the contract's current USDC balance\\n     * @return The USDC balance of this contract\\n     */\\n    function getContractUSDCBalance() external view returns (uint256) {\\n        return usdcToken.balanceOf(address(this));\\n    }\\n\\n    /**\\n     * @dev Get the contract's current ETH balance\\n     * @return The ETH balance of this contract\\n     */\\n    function getContractETHBalance() external view returns (uint256) {\\n        return address(this).balance;\\n    }\\n\\n    // Owner functions\\n\\n    /**\\n     * @dev Update the exchange rate (owner only)\\n     * @param _newRate The new exchange rate (USDC per ETH with 6 decimals)\\n     */\\n    function updateExchangeRate(uint256 _newRate) external onlyOwner {\\n        exchangeRate = _newRate;\\n        emit ExchangeRateUpdated(_newRate);\\n    }\\n\\n    /**\\n     * @dev Fund the contract with USDC (owner only)\\n     * @param amount The amount of USDC to add to the contract\\n     */\\n    function fundWithUSDC(uint256 amount) external onlyOwner {\\n        require(usdcToken.transferFrom(msg.sender, address(this), amount), \\\"USDC transfer failed\\\");\\n    }\\n\\n    /**\\n     * @dev Withdraw USDC from the contract (owner only)\\n     * @param amount The amount of USDC to withdraw\\n     */\\n    function withdrawUSDC(uint256 amount) external onlyOwner {\\n        require(usdcToken.balanceOf(address(this)) >= amount, \\\"Insufficient USDC balance\\\");\\n        require(usdcToken.transfer(owner, amount), \\\"USDC transfer failed\\\");\\n        emit USDCWithdrawn(owner, amount);\\n    }\\n\\n    /**\\n     * @dev Withdraw ETH from the contract (owner only)\\n     * @param amount The amount of ETH to withdraw (in wei)\\n     */\\n    function withdrawETH(uint256 amount) external onlyOwner {\\n        require(address(this).balance >= amount, \\\"Insufficient ETH balance\\\");\\n        payable(owner).transfer(amount);\\n        emit ETHWithdrawn(owner, amount);\\n    }\\n\\n    /**\\n     * @dev Emergency withdraw all ETH (owner only)\\n     */\\n    function emergencyWithdrawETH() external onlyOwner {\\n        uint256 balance = address(this).balance;\\n        if (balance > 0) {\\n            payable(owner).transfer(balance);\\n            emit ETHWithdrawn(owner, balance);\\n        }\\n    }\\n\\n    /**\\n     * @dev Emergency withdraw all USDC (owner only)\\n     */\\n    function emergencyWithdrawUSDC() external onlyOwner {\\n        uint256 balance = usdcToken.balanceOf(address(this));\\n        if (balance > 0) {\\n            require(usdcToken.transfer(owner, balance), \\\"USDC transfer failed\\\");\\n            emit USDCWithdrawn(owner, balance);\\n        }\\n    }\\n\\n    /**\\n     * @dev Transfer ownership (owner only)\\n     * @param newOwner The new owner address\\n     */\\n    function transferOwnership(address newOwner) external onlyOwner {\\n        require(newOwner != address(0), \\\"New owner cannot be zero address\\\");\\n        owner = newOwner;\\n    }\\n\\n    // Allow contract to receive ETH\\n    receive() external payable {}\\n}\\n\",\"keccak256\":\"0x2ba0ef9e79cf28030d6c6b9c8569b4652fae09f039a1eb15d9d438a7e0780c36\",\"license\":\"MIT\"},\"contracts/MockUSDC.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\n/*Frontend tip:\\n    Can make the user experience smoother by:\\n    1. User only input donation amount once (not in both approve() and offset()\\n            Asking the user for the donation amount once,\\n            Then, in your frontend code, call approve(spender, amount) and\\n            offset(amount) with the same value.\\n    2. User nonid to input klimadao_contract address\\n            Hardcode or configure the KlimadaoDonation contract address in your frontend code \\n            (for example, in a config file or as a constant).*/\\n\\n/// @title MockUSDC - Simple ERC20 Token for Testing\\ncontract MockUSDC {\\n    string public name = \\\"Mock USDC\\\";\\n    string public symbol = \\\"mUSDC\\\";\\n    uint8 public decimals = 6;\\n    uint256 public totalSupply;\\n    mapping(address => uint256) public balanceOf;\\n    mapping(address => mapping(address => uint256)) public allowance;\\n\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    constructor(uint256 _initialSupply) {\\n        totalSupply = _initialSupply;\\n        balanceOf[msg.sender] = _initialSupply;\\n        emit Transfer(address(0), msg.sender, _initialSupply);\\n    }\\n\\n    function approve(address spender, uint256 amount) external returns (bool) {\\n        allowance[msg.sender][spender] = amount;\\n        emit Approval(msg.sender, spender, amount);\\n        return true;\\n    }\\n\\n    function transferFrom(address from, address to, uint256 amount) external returns (bool) {\\n        require(balanceOf[from] >= amount, \\\"Insufficient balance\\\");\\n        require(allowance[from][msg.sender] >= amount, \\\"Allowance exceeded\\\");\\n        balanceOf[from] -= amount;\\n        balanceOf[to] += amount;\\n        allowance[from][msg.sender] -= amount;\\n        emit Transfer(from, to, amount);\\n        return true;\\n    }\\n\\n    // Add a transfer function for completeness (optional but standard)\\n    function transfer(address to, uint256 amount) external returns (bool) {\\n        require(balanceOf[msg.sender] >= amount, \\\"Insufficient balance\\\");\\n        balanceOf[msg.sender] -= amount;\\n        balanceOf[to] += amount;\\n        emit Transfer(msg.sender, to, amount);\\n        return true;\\n    }\\n}\\n\",\"keccak256\":\"0x3f95b30a63903d81026f041fa8433f3a4bf6b4d3b610f09925f59d9de8f5eb4e\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50604051610d1c380380610d1c83398101604081905261002f91610061565b600080546001600160a01b039093166001600160a01b031993841617905560018054909216331790915560025561009b565b6000806040838503121561007457600080fd5b82516001600160a01b038116811461008b57600080fd5b6020939093015192949293505050565b610c72806100aa6000396000f3fe6080604052600436106100eb5760003560e01c80638c89a0ad1161008a578063db81f99b11610059578063db81f99b14610234578063e6aa216c14610254578063f14210a614610269578063f2fde38b1461028957600080fd5b80638c89a0ad146101c15780638da5cb5b146101d4578063b9e205ae146101f4578063d98076871461021457600080fd5b80634cabb824116100c65780634cabb8241461016d5780634fef14881461018d5780636996d739146101a457806384536017146101ac57600080fd5b80622772c2146100f757806311eac8551461011f5780633ba0b9a91461015757600080fd5b366100f257005b600080fd5b34801561010357600080fd5b5061010c6102a9565b6040519081526020015b60405180910390f35b34801561012b57600080fd5b5060005461013f906001600160a01b031681565b6040516001600160a01b039091168152602001610116565b34801561016357600080fd5b5061010c60025481565b34801561017957600080fd5b5061010c610188366004610b02565b61031b565b34801561019957600080fd5b506101a2610344565b005b6101a26104c9565b3480156101b857600080fd5b506101a26106bc565b3480156101cd57600080fd5b504761010c565b3480156101e057600080fd5b5060015461013f906001600160a01b031681565b34801561020057600080fd5b506101a261020f366004610b02565b610767565b34801561022057600080fd5b506101a261022f366004610b02565b6107cc565b34801561024057600080fd5b506101a261024f366004610b02565b61088d565b34801561026057600080fd5b5060025461010c565b34801561027557600080fd5b506101a2610284366004610b02565b6109ac565b34801561029557600080fd5b506101a26102a4366004610b1b565b610a60565b600080546040516370a0823160e01b81523060048201526001600160a01b03909116906370a0823190602401602060405180830381865afa1580156102f2573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103169190610b4b565b905090565b6000670de0b6b3a7640000600254836103349190610b64565b61033e9190610b89565b92915050565b6001546001600160a01b031633146103775760405162461bcd60e51b815260040161036e90610bab565b60405180910390fd5b600080546040516370a0823160e01b81523060048201526001600160a01b03909116906370a0823190602401602060405180830381865afa1580156103c0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103e49190610b4b565b905080156104c65760005460015460405163a9059cbb60e01b81526001600160a01b0391821660048201526024810184905291169063a9059cbb906044015b6020604051808303816000875af1158015610442573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104669190610bec565b6104825760405162461bcd60e51b815260040161036e90610c0e565b6001546040518281526001600160a01b03909116907f2aa7fb97600ea702b454359fc3d02ae9fa48367e7155505d38cee896e5b5aae7906020015b60405180910390a25b50565b600034116105115760405162461bcd60e51b815260206004820152601560248201527404d7573742073656e642045544820746f207377617605c1b604482015260640161036e565b6000670de0b6b3a76400006002543461052a9190610b64565b6105349190610b89565b6000546040516370a0823160e01b815230600482015291925082916001600160a01b03909116906370a0823190602401602060405180830381865afa158015610581573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105a59190610b4b565b10156105f35760405162461bcd60e51b815260206004820152601d60248201527f496e73756666696369656e74205553444320696e20636f6e7472616374000000604482015260640161036e565b60005460405163a9059cbb60e01b8152336004820152602481018390526001600160a01b039091169063a9059cbb906044016020604051808303816000875af1158015610644573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106689190610bec565b6106845760405162461bcd60e51b815260040161036e90610c0e565b604080513481526020810183905233917f4022684c8f3781f1e0be442247f1efa1f4cf2f154dd9fa9ab0d1d5875d2b76c691016104bd565b6001546001600160a01b031633146106e65760405162461bcd60e51b815260040161036e90610bab565b4780156104c6576001546040516001600160a01b039091169082156108fc029083906000818181858888f19350505050158015610727573d6000803e3d6000fd5b506001546040518281526001600160a01b03909116907f94b2de810873337ed265c5f8cf98c9cffefa06b8607f9a2f1fbaebdfbcfbef1c906020016104bd565b6001546001600160a01b031633146107915760405162461bcd60e51b815260040161036e90610bab565b60028190556040518181527f388f446e9526fe5c9af20a5919b342370c8a7c0cb05245afe1e545658fa3cdba9060200160405180910390a150565b6001546001600160a01b031633146107f65760405162461bcd60e51b815260040161036e90610bab565b6000546040516323b872dd60e01b8152336004820152306024820152604481018390526001600160a01b03909116906323b872dd906064016020604051808303816000875af115801561084d573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108719190610bec565b6104c65760405162461bcd60e51b815260040161036e90610c0e565b6001546001600160a01b031633146108b75760405162461bcd60e51b815260040161036e90610bab565b6000546040516370a0823160e01b815230600482015282916001600160a01b0316906370a0823190602401602060405180830381865afa1580156108ff573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109239190610b4b565b10156109715760405162461bcd60e51b815260206004820152601960248201527f496e73756666696369656e7420555344432062616c616e636500000000000000604482015260640161036e565b60005460015460405163a9059cbb60e01b81526001600160a01b0391821660048201526024810184905291169063a9059cbb90604401610423565b6001546001600160a01b031633146109d65760405162461bcd60e51b815260040161036e90610bab565b80471015610a265760405162461bcd60e51b815260206004820152601860248201527f496e73756666696369656e74204554482062616c616e63650000000000000000604482015260640161036e565b6001546040516001600160a01b039091169082156108fc029083906000818181858888f19350505050158015610727573d6000803e3d6000fd5b6001546001600160a01b03163314610a8a5760405162461bcd60e51b815260040161036e90610bab565b6001600160a01b038116610ae05760405162461bcd60e51b815260206004820181905260248201527f4e6577206f776e65722063616e6e6f74206265207a65726f2061646472657373604482015260640161036e565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b600060208284031215610b1457600080fd5b5035919050565b600060208284031215610b2d57600080fd5b81356001600160a01b0381168114610b4457600080fd5b9392505050565b600060208284031215610b5d57600080fd5b5051919050565b808202811582820484141761033e57634e487b7160e01b600052601160045260246000fd5b600082610ba657634e487b7160e01b600052601260045260246000fd5b500490565b60208082526021908201527f4f6e6c79206f776e65722063616e2063616c6c20746869732066756e6374696f6040820152603760f91b606082015260800190565b600060208284031215610bfe57600080fd5b81518015158114610b4457600080fd5b6020808252601490820152731554d110c81d1c985b9cd9995c8819985a5b195960621b60408201526060019056fea264697066735822122099d9bd7bc3e21b756decbef7e979ac040a584b856342c73608c77c4e546e172364736f6c63430008140033",
+  "deployedBytecode": "0x6080604052600436106100eb5760003560e01c80638c89a0ad1161008a578063db81f99b11610059578063db81f99b14610234578063e6aa216c14610254578063f14210a614610269578063f2fde38b1461028957600080fd5b80638c89a0ad146101c15780638da5cb5b146101d4578063b9e205ae146101f4578063d98076871461021457600080fd5b80634cabb824116100c65780634cabb8241461016d5780634fef14881461018d5780636996d739146101a457806384536017146101ac57600080fd5b80622772c2146100f757806311eac8551461011f5780633ba0b9a91461015757600080fd5b366100f257005b600080fd5b34801561010357600080fd5b5061010c6102a9565b6040519081526020015b60405180910390f35b34801561012b57600080fd5b5060005461013f906001600160a01b031681565b6040516001600160a01b039091168152602001610116565b34801561016357600080fd5b5061010c60025481565b34801561017957600080fd5b5061010c610188366004610b02565b61031b565b34801561019957600080fd5b506101a2610344565b005b6101a26104c9565b3480156101b857600080fd5b506101a26106bc565b3480156101cd57600080fd5b504761010c565b3480156101e057600080fd5b5060015461013f906001600160a01b031681565b34801561020057600080fd5b506101a261020f366004610b02565b610767565b34801561022057600080fd5b506101a261022f366004610b02565b6107cc565b34801561024057600080fd5b506101a261024f366004610b02565b61088d565b34801561026057600080fd5b5060025461010c565b34801561027557600080fd5b506101a2610284366004610b02565b6109ac565b34801561029557600080fd5b506101a26102a4366004610b1b565b610a60565b600080546040516370a0823160e01b81523060048201526001600160a01b03909116906370a0823190602401602060405180830381865afa1580156102f2573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103169190610b4b565b905090565b6000670de0b6b3a7640000600254836103349190610b64565b61033e9190610b89565b92915050565b6001546001600160a01b031633146103775760405162461bcd60e51b815260040161036e90610bab565b60405180910390fd5b600080546040516370a0823160e01b81523060048201526001600160a01b03909116906370a0823190602401602060405180830381865afa1580156103c0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103e49190610b4b565b905080156104c65760005460015460405163a9059cbb60e01b81526001600160a01b0391821660048201526024810184905291169063a9059cbb906044015b6020604051808303816000875af1158015610442573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104669190610bec565b6104825760405162461bcd60e51b815260040161036e90610c0e565b6001546040518281526001600160a01b03909116907f2aa7fb97600ea702b454359fc3d02ae9fa48367e7155505d38cee896e5b5aae7906020015b60405180910390a25b50565b600034116105115760405162461bcd60e51b815260206004820152601560248201527404d7573742073656e642045544820746f207377617605c1b604482015260640161036e565b6000670de0b6b3a76400006002543461052a9190610b64565b6105349190610b89565b6000546040516370a0823160e01b815230600482015291925082916001600160a01b03909116906370a0823190602401602060405180830381865afa158015610581573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906105a59190610b4b565b10156105f35760405162461bcd60e51b815260206004820152601d60248201527f496e73756666696369656e74205553444320696e20636f6e7472616374000000604482015260640161036e565b60005460405163a9059cbb60e01b8152336004820152602481018390526001600160a01b039091169063a9059cbb906044016020604051808303816000875af1158015610644573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906106689190610bec565b6106845760405162461bcd60e51b815260040161036e90610c0e565b604080513481526020810183905233917f4022684c8f3781f1e0be442247f1efa1f4cf2f154dd9fa9ab0d1d5875d2b76c691016104bd565b6001546001600160a01b031633146106e65760405162461bcd60e51b815260040161036e90610bab565b4780156104c6576001546040516001600160a01b039091169082156108fc029083906000818181858888f19350505050158015610727573d6000803e3d6000fd5b506001546040518281526001600160a01b03909116907f94b2de810873337ed265c5f8cf98c9cffefa06b8607f9a2f1fbaebdfbcfbef1c906020016104bd565b6001546001600160a01b031633146107915760405162461bcd60e51b815260040161036e90610bab565b60028190556040518181527f388f446e9526fe5c9af20a5919b342370c8a7c0cb05245afe1e545658fa3cdba9060200160405180910390a150565b6001546001600160a01b031633146107f65760405162461bcd60e51b815260040161036e90610bab565b6000546040516323b872dd60e01b8152336004820152306024820152604481018390526001600160a01b03909116906323b872dd906064016020604051808303816000875af115801561084d573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906108719190610bec565b6104c65760405162461bcd60e51b815260040161036e90610c0e565b6001546001600160a01b031633146108b75760405162461bcd60e51b815260040161036e90610bab565b6000546040516370a0823160e01b815230600482015282916001600160a01b0316906370a0823190602401602060405180830381865afa1580156108ff573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109239190610b4b565b10156109715760405162461bcd60e51b815260206004820152601960248201527f496e73756666696369656e7420555344432062616c616e636500000000000000604482015260640161036e565b60005460015460405163a9059cbb60e01b81526001600160a01b0391821660048201526024810184905291169063a9059cbb90604401610423565b6001546001600160a01b031633146109d65760405162461bcd60e51b815260040161036e90610bab565b80471015610a265760405162461bcd60e51b815260206004820152601860248201527f496e73756666696369656e74204554482062616c616e63650000000000000000604482015260640161036e565b6001546040516001600160a01b039091169082156108fc029083906000818181858888f19350505050158015610727573d6000803e3d6000fd5b6001546001600160a01b03163314610a8a5760405162461bcd60e51b815260040161036e90610bab565b6001600160a01b038116610ae05760405162461bcd60e51b815260206004820181905260248201527f4e6577206f776e65722063616e6e6f74206265207a65726f2061646472657373604482015260640161036e565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b600060208284031215610b1457600080fd5b5035919050565b600060208284031215610b2d57600080fd5b81356001600160a01b0381168114610b4457600080fd5b9392505050565b600060208284031215610b5d57600080fd5b5051919050565b808202811582820484141761033e57634e487b7160e01b600052601160045260246000fd5b600082610ba657634e487b7160e01b600052601260045260246000fd5b500490565b60208082526021908201527f4f6e6c79206f776e65722063616e2063616c6c20746869732066756e6374696f6040820152603760f91b606082015260800190565b600060208284031215610bfe57600080fd5b81518015158114610b4457600080fd5b6020808252601490820152731554d110c81d1c985b9cd9995c8819985a5b195960621b60408201526060019056fea264697066735822122099d9bd7bc3e21b756decbef7e979ac040a584b856342c73608c77c4e546e172364736f6c63430008140033",
+  "devdoc": {
+    "details": "A simple contract that allows users to swap ETH for USDC at a fixed rate",
+    "kind": "dev",
+    "methods": {
+      "calculateUSDCAmount(uint256)": {
+        "details": "Calculate how much USDC you would get for a given amount of ETH",
+        "params": {
+          "ethAmount": "The amount of ETH (in wei)"
+        },
+        "returns": {
+          "_0": "The amount of USDC (with 6 decimals)"
+        }
+      },
+      "emergencyWithdrawETH()": {
+        "details": "Emergency withdraw all ETH (owner only)"
+      },
+      "emergencyWithdrawUSDC()": {
+        "details": "Emergency withdraw all USDC (owner only)"
+      },
+      "fundWithUSDC(uint256)": {
+        "details": "Fund the contract with USDC (owner only)",
+        "params": {
+          "amount": "The amount of USDC to add to the contract"
+        }
+      },
+      "getContractETHBalance()": {
+        "details": "Get the contract's current ETH balance",
+        "returns": {
+          "_0": "The ETH balance of this contract"
+        }
+      },
+      "getContractUSDCBalance()": {
+        "details": "Get the contract's current USDC balance",
+        "returns": {
+          "_0": "The USDC balance of this contract"
+        }
+      },
+      "getExchangeRate()": {
+        "details": "Get the current exchange rate",
+        "returns": {
+          "_0": "The amount of USDC (with 6 decimals) per 1 ETH"
+        }
+      },
+      "swapETHForUSDC()": {
+        "details": "Swap ETH for USDC at the current exchange rate"
+      },
+      "transferOwnership(address)": {
+        "details": "Transfer ownership (owner only)",
+        "params": {
+          "newOwner": "The new owner address"
+        }
+      },
+      "updateExchangeRate(uint256)": {
+        "details": "Update the exchange rate (owner only)",
+        "params": {
+          "_newRate": "The new exchange rate (USDC per ETH with 6 decimals)"
+        }
+      },
+      "withdrawETH(uint256)": {
+        "details": "Withdraw ETH from the contract (owner only)",
+        "params": {
+          "amount": "The amount of ETH to withdraw (in wei)"
+        }
+      },
+      "withdrawUSDC(uint256)": {
+        "details": "Withdraw USDC from the contract (owner only)",
+        "params": {
+          "amount": "The amount of USDC to withdraw"
+        }
+      }
+    },
+    "title": "ETH to USDC Swap Contract",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "swapETHForUSDC()": {
+        "notice": "Sends ETH and receives USDC in return"
+      }
+    },
+    "notice": "This is for testnet demonstration purposes",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 4145,
+        "contract": "contracts/ETHUSDCSwap.sol:ETHUSDCSwap",
+        "label": "usdcToken",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(MockUSDC)5668"
+      },
+      {
+        "astId": 4147,
+        "contract": "contracts/ETHUSDCSwap.sol:ETHUSDCSwap",
+        "label": "owner",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 4149,
+        "contract": "contracts/ETHUSDCSwap.sol:ETHUSDCSwap",
+        "label": "exchangeRate",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint256"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_contract(MockUSDC)5668": {
+        "encoding": "inplace",
+        "label": "contract MockUSDC",
+        "numberOfBytes": "20"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

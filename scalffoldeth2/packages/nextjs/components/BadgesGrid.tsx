@@ -1,12 +1,21 @@
 "use client";
 
-import Image from "next/image";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 type Props = { address?: `0x${string}` };
 
-const BadgeCard = ({ tokenId, imageURI, title, description }: { tokenId: bigint; imageURI?: string; title: string; description: string }) => {
+const BadgeCard = ({
+  tokenId,
+  imageURI,
+  title,
+  description,
+}: {
+  tokenId: bigint;
+  imageURI?: string;
+  title: string;
+  description: string;
+}) => {
   return (
     <div className="rounded-xl border bg-base-100 p-3 shadow-sm hover:shadow transition">
       <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-base-200">
@@ -18,7 +27,9 @@ const BadgeCard = ({ tokenId, imageURI, title, description }: { tokenId: bigint;
         )}
       </div>
       <div className="mt-2">
-        <div className="text-sm font-semibold">{title} #{String(tokenId)}</div>
+        <div className="text-sm font-semibold">
+          {title} #{String(tokenId)}
+        </div>
         <div className="text-xs text-gray-600 line-clamp-2">{description}</div>
       </div>
     </div>
@@ -26,28 +37,77 @@ const BadgeCard = ({ tokenId, imageURI, title, description }: { tokenId: bigint;
 };
 
 export const BadgesGrid = ({ address }: Props) => {
-  // Prefer direct owner index if available
+  // Get NFTs from EcoQuestNFT contract
   const { data: owned } = useScaffoldReadContract({
     contractName: "EcoQuestNFT",
     functionName: "getNFTsByOwner",
-    args: address ? [address] : undefined,
+    args: address ? [address] : [undefined],
   }) as { data: bigint[] | undefined };
 
-  const ownedIds = useMemo(() => (owned && owned.length ? owned.slice(0, 5) : []), [owned]);
+  // Get collected game NFTs from localStorage (until EcoQuestCollection types are ready)
+  const [gameNFTs, setGameNFTs] = useState<any[]>([]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && address) {
+      const stored = localStorage.getItem(`ecoquest-nfts-${address}`);
+      if (stored) {
+        try {
+          const parsedNFTs = JSON.parse(stored);
+          setGameNFTs(parsedNFTs.slice(0, 2)); // Show first 2 game NFTs
+        } catch (error) {
+          console.error("Error loading stored NFTs:", error);
+        }
+      }
+    }
+  }, [address]);
+
+  const ownedIds = useMemo(() => (owned && owned.length ? owned.slice(0, 3) : []), [owned]);
+
+  const totalNFTs = ownedIds.length + gameNFTs.length;
   const placeholders = useMemo(() => {
     const emojis = ["🌱", "🌿", "🌳", "🍃", "🌎", "🌊", "🌸", "🐝"];
-    const needed = Math.max(0, 5 - ownedIds.length);
+    const needed = Math.max(0, 5 - totalNFTs);
     return Array.from({ length: needed }, (_, i) => emojis[i % emojis.length]);
-  }, [ownedIds.length]);
+  }, [totalNFTs]);
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      {/* Show EcoQuestNFT badges */}
       {ownedIds.map(id => (
         <BadgeResolver key={String(id)} tokenId={id} ownerFilter={address} />
       ))}
+
+      {/* Show game collected NFTs */}
+      {gameNFTs.map((nft: any, i: number) => (
+        <div key={`game-${i}`} className="rounded-xl border bg-base-100 p-3 shadow-sm">
+          <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-base-200 flex items-center justify-center">
+            {nft.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={nft.image}
+                alt={nft.name}
+                className="object-cover w-full h-full"
+                onError={e => {
+                  e.currentTarget.src = "/ecoquest/assets/default.png";
+                }}
+              />
+            ) : (
+              <div className="text-4xl">🎮</div>
+            )}
+          </div>
+          <div className="mt-2">
+            <div className="text-sm font-semibold">{nft.name || "Game NFT"}</div>
+            <div className="text-xs text-gray-600">{nft.rarity || "Common"}</div>
+          </div>
+        </div>
+      ))}
+
+      {/* Show placeholders */}
       {placeholders.map((emoji, i) => (
-        <div key={`ph-${i}`} className="rounded-xl border bg-base-100 p-3 shadow-sm flex flex-col items-center justify-center">
+        <div
+          key={`ph-${i}`}
+          className="rounded-xl border bg-base-100 p-3 shadow-sm flex flex-col items-center justify-center"
+        >
           <div className="text-5xl">{emoji}</div>
           <div className="mt-2 text-sm font-semibold">EcoProof</div>
           <div className="text-xs text-gray-600">Collect impact badges</div>
@@ -57,12 +117,12 @@ export const BadgesGrid = ({ address }: Props) => {
   );
 };
 
-const OwnedBadges = ({ tokenIds, ownerFilter }: { tokenIds: bigint[]; ownerFilter?: `0x${string}` }) => {
-  const items = tokenIds.map(id => <BadgeResolver key={String(id)} tokenId={id} ownerFilter={ownerFilter} />);
-  // limit to first 5 non-null results
-  const filtered = items.filter(Boolean).slice(0, 5);
-  return <>{filtered}</>;
-};
+// const OwnedBadges = ({ tokenIds, ownerFilter }: { tokenIds: bigint[]; ownerFilter?: `0x${string}` }) => {
+//   const items = tokenIds.map(id => <BadgeResolver key={String(id)} tokenId={id} ownerFilter={ownerFilter} />);
+//   // limit to first 5 non-null results
+//   const filtered = items.filter(Boolean).slice(0, 5);
+//   return <>{filtered}</>;
+// };
 
 const BadgeResolver = ({ tokenId, ownerFilter }: { tokenId: bigint; ownerFilter?: `0x${string}` }) => {
   const { data } = useScaffoldReadContract({
@@ -77,15 +137,15 @@ const BadgeResolver = ({ tokenId, ownerFilter }: { tokenId: bigint; ownerFilter?
     args: [tokenId],
   }) as { data: `0x${string}` | undefined };
 
-  if (ownerFilter && owner && owner.toLowerCase() !== ownerFilter.toLowerCase()) {
-    return null;
-  }
-
   const title = useMemo(() => {
     if (!data) return "EcoProof";
     const typeName = ["Unknown", "Bronze", "Silver", "Gold", "Rare"][Number(data.nftType) || 0] || "Badge";
     return `${typeName}`;
   }, [data]);
+
+  if (ownerFilter && owner && owner.toLowerCase() !== ownerFilter.toLowerCase()) {
+    return null;
+  }
 
   return (
     <BadgeCard
@@ -98,5 +158,3 @@ const BadgeResolver = ({ tokenId, ownerFilter }: { tokenId: bigint; ownerFilter?
 };
 
 export default BadgesGrid;
-
-

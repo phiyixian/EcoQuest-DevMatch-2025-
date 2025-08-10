@@ -32,9 +32,9 @@ export const RainbowKitCustomConnectButton = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <button 
-                    className="btn btn-primary btn-sm" 
-                    onClick={openConnectModal} 
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={openConnectModal}
                     type="button"
                     suppressHydrationWarning
                   >
@@ -43,9 +43,9 @@ export const RainbowKitCustomConnectButton = () => {
                 );
               }
 
-              if (chain.unsupported || chain.id !== targetNetwork.id) {
-                return <WrongNetworkDropdown />;
-              }
+              // if (chain.unsupported || chain.id !== targetNetwork.id) {
+              //   return <WrongNetworkDropdown />;
+              // }
 
               return (
                 <>

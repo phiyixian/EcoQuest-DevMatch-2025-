@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useAccount, useContractRead } from "wagmi";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth/useDeployedContractInfo";
+import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 
 // Dummy NFT data for demo
 const dummyNFTs = [
@@ -65,7 +64,7 @@ export default function NFTGalleryPage() {
   const [selectedNFT, setSelectedNFT] = useState<any>(null);
 
   // Get contract data
-  const { data: nftContract } = useDeployedContractInfo("EcoQuestNFT");
+  // const { data: nftContract } = useDeployedContractInfo("EcoQuestNFT");
 
   // In a real implementation, you would fetch NFTs from the contract
   useEffect(() => {
@@ -138,21 +137,21 @@ export default function NFTGalleryPage() {
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total NFTs</h3>
             <p className="text-3xl font-bold text-green-600">{userNFTs.length}</p>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Total CO₂ Offset</h3>
             <p className="text-3xl font-bold text-blue-600">
               {userNFTs.reduce((sum, nft) => sum + parseFloat(nft.co2Offset), 0).toFixed(2)} kg
             </p>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Rare Discoveries</h3>
             <p className="text-3xl font-bold text-purple-600">
               {userNFTs.filter(nft => nft.type === "RARE_DISCOVERY").length}
             </p>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-lg p-6 text-center">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">Quest Completions</h3>
             <p className="text-3xl font-bold text-yellow-600">
@@ -164,7 +163,7 @@ export default function NFTGalleryPage() {
         {/* NFT Grid */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">Your EcoProof Collection</h2>
-          
+
           {isLoading ? (
             <div className="text-center py-8">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
@@ -174,7 +173,9 @@ export default function NFTGalleryPage() {
             <div className="text-center py-8">
               <div className="text-6xl mb-4">🌱</div>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">No NFTs Yet</h3>
-              <p className="text-gray-600 mb-4">Start donating and playing EcoQuest to earn your first EcoProof NFTs!</p>
+              <p className="text-gray-600 mb-4">
+                Start donating and playing EcoQuest to earn your first EcoProof NFTs!
+              </p>
               <a
                 href="/ecoquest"
                 className="inline-block bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
@@ -184,7 +185,7 @@ export default function NFTGalleryPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {userNFTs.map((nft) => (
+              {userNFTs.map(nft => (
                 <div
                   key={nft.id}
                   className="bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-6 border border-green-200 hover:shadow-lg transition-shadow cursor-pointer"
@@ -192,24 +193,26 @@ export default function NFTGalleryPage() {
                 >
                   <div className="text-center mb-4">
                     <div className="text-6xl mb-2">{nft.image}</div>
-                    <div className="text-sm text-gray-500">{getTypeIcon(nft.type)} {nft.type.replace('_', ' ')}</div>
+                    <div className="text-sm text-gray-500">
+                      {getTypeIcon(nft.type)} {nft.type.replace("_", " ")}
+                    </div>
                   </div>
-                  
+
                   <h3 className="text-lg font-semibold text-gray-800 mb-2 text-center">{nft.name}</h3>
-                  
+
                   <div className="space-y-2 text-sm">
                     <p className="text-gray-600 text-center">{nft.description}</p>
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="text-gray-500">CO₂ Offset:</span>
                       <span className="font-semibold text-green-600">{nft.co2Offset} kg</span>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="text-gray-500">Rarity:</span>
                       <span className={`font-semibold ${getRarityColor(nft.rarity)}`}>{nft.rarity}</span>
                     </div>
-                    
+
                     <div className="flex justify-between items-center">
                       <span className="text-gray-500">Date:</span>
                       <span className="text-gray-600">{nft.timestamp}</span>
@@ -230,29 +233,29 @@ export default function NFTGalleryPage() {
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">{selectedNFT.name}</h3>
                 <p className="text-gray-600 mb-4">{selectedNFT.description}</p>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Type:</span>
-                  <span className="font-semibold">{selectedNFT.type.replace('_', ' ')}</span>
+                  <span className="font-semibold">{selectedNFT.type.replace("_", " ")}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-500">CO₂ Offset:</span>
                   <span className="font-semibold text-green-600">{selectedNFT.co2Offset} kg</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-500">Rarity:</span>
                   <span className={`font-semibold ${getRarityColor(selectedNFT.rarity)}`}>{selectedNFT.rarity}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-gray-500">Date:</span>
                   <span className="text-gray-600">{selectedNFT.timestamp}</span>
                 </div>
               </div>
-              
+
               <div className="mt-6 text-center">
                 <button
                   onClick={() => setSelectedNFT(null)}
@@ -277,4 +280,4 @@ export default function NFTGalleryPage() {
       </div>
     </div>
   );
-} 
+}

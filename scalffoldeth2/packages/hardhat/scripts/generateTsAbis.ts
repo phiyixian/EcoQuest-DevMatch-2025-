@@ -81,11 +81,11 @@ function getInheritedFunctions(sources: Record<string, any>, contractName: strin
 
 function getContractDataFromDeployments() {
   console.log("Looking for deployments in:", DEPLOYMENTS_DIR);
-if (fs.existsSync(DEPLOYMENTS_DIR)) {
-  console.log("Found networks:", fs.readdirSync(DEPLOYMENTS_DIR));
-} else {
-  console.log("Deployments directory NOT found!");
-}
+  if (fs.existsSync(DEPLOYMENTS_DIR)) {
+    console.log("Found networks:", fs.readdirSync(DEPLOYMENTS_DIR));
+  } else {
+    console.log("Deployments directory NOT found!");
+  }
 
   const output = {} as Record<string, any>;
   for (const chainName of getDirectories(DEPLOYMENTS_DIR)) {
@@ -102,7 +102,6 @@ if (fs.existsSync(DEPLOYMENTS_DIR)) {
   }
   return output;
 }
-
 
 /**
  * Generates the TypeScript contract definition file based on the json output of the contract deployment scripts

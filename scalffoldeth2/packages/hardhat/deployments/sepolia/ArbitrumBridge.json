@@ -1,0 +1,716 @@
+{
+  "address": "0xBa67f776e53D514704159d96392fe165b59B982E",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_bridgeFee",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "BridgeFeeUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "ethAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "arbitrumRecipient",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "BridgeInitiated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "ethAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "BridgeProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "status",
+          "type": "bool"
+        }
+      ],
+      "name": "BridgeStatusUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "FeesWithdrawn",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "bridgeActive",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "bridgeFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "arbitrumRecipient",
+          "type": "string"
+        }
+      ],
+      "name": "bridgeToArbitrum",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bridgeTransactions",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "ethAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "arbitrumRecipient",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "processed",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "emergencyWithdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBridgeStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBridgeTransaction",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "user",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "ethAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "arbitrumRecipient",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "processed",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct ArbitrumBridge.BridgeTransaction",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getContractBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTotalTransactions",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserTransactions",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "transactionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "processBridgeTransaction",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalBridged",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "transactionCounter",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_newFee",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateBridgeFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bool",
+          "name": "_active",
+          "type": "bool"
+        }
+      ],
+      "name": "updateBridgeStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "userTransactions",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "withdrawFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
+    }
+  ],
+  "transactionHash": "0x1cd532a790cc67bac6d53818f87bdc41c4b123e177a149d0e7d6da65aaa5ad84",
+  "receipt": {
+    "to": null,
+    "from": "0x2878e154820a6A6AE190109036266b02bA46DE05",
+    "contractAddress": "0xBa67f776e53D514704159d96392fe165b59B982E",
+    "transactionIndex": 427,
+    "gasUsed": "1085996",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x51d3a25f2d1acfcfd90fe9e1b044459a465f840f8031a9cd1b7f18f55c7c8bd8",
+    "transactionHash": "0x1cd532a790cc67bac6d53818f87bdc41c4b123e177a149d0e7d6da65aaa5ad84",
+    "logs": [],
+    "blockNumber": 8952323,
+    "cumulativeGasUsed": "35965953",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "1000000000000000"
+  ],
+  "numDeployments": 2,
+  "solcInputHash": "a3003d6c8ccce0822ed152d48417970e",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_bridgeFee\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newFee\",\"type\":\"uint256\"}],\"name\":\"BridgeFeeUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"ethAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"arbitrumRecipient\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"}],\"name\":\"BridgeInitiated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"ethAmount\",\"type\":\"uint256\"}],\"name\":\"BridgeProcessed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"status\",\"type\":\"bool\"}],\"name\":\"BridgeStatusUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"FeesWithdrawn\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"bridgeActive\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"bridgeFee\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"arbitrumRecipient\",\"type\":\"string\"}],\"name\":\"bridgeToArbitrum\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"bridgeTransactions\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"ethAmount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"arbitrumRecipient\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"processed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"emergencyWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBridgeStats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"}],\"name\":\"getBridgeTransaction\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"ethAmount\",\"type\":\"uint256\"},{\"internalType\":\"string\",\"name\":\"arbitrumRecipient\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"timestamp\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"processed\",\"type\":\"bool\"}],\"internalType\":\"struct ArbitrumBridge.BridgeTransaction\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getContractBalance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getTotalTransactions\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getUserTransactions\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"transactionId\",\"type\":\"uint256\"}],\"name\":\"processBridgeTransaction\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalBridged\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"transactionCounter\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newFee\",\"type\":\"uint256\"}],\"name\":\"updateBridgeFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bool\",\"name\":\"_active\",\"type\":\"bool\"}],\"name\":\"updateBridgeStatus\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"userTransactions\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"withdrawFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"details\":\"A simplified bridge contract for bridging ETH from Ethereum L1 to Arbitrum L2\",\"kind\":\"dev\",\"methods\":{\"bridgeToArbitrum(string)\":{\"details\":\"Bridge ETH to Arbitrum\",\"params\":{\"arbitrumRecipient\":\"The recipient address on Arbitrum (as string)\"}},\"emergencyWithdraw()\":{\"details\":\"Emergency withdrawal (owner only)\"},\"getBridgeStats()\":{\"details\":\"Get bridge statistics\",\"returns\":{\"_0\":\"totalBridged, totalTransactions, bridgeFee, bridgeActive\"}},\"getBridgeTransaction(uint256)\":{\"details\":\"Get bridge transaction details\",\"params\":{\"transactionId\":\"The transaction ID\"},\"returns\":{\"_0\":\"The bridge transaction details\"}},\"getContractBalance()\":{\"details\":\"Get contract ETH balance\",\"returns\":{\"_0\":\"The contract's ETH balance\"}},\"getTotalTransactions()\":{\"details\":\"Get total number of transactions\",\"returns\":{\"_0\":\"The total transaction count\"}},\"getUserTransactions(address)\":{\"details\":\"Get user's bridge transaction IDs\",\"params\":{\"user\":\"The user address\"},\"returns\":{\"_0\":\"Array of transaction IDs\"}},\"processBridgeTransaction(uint256)\":{\"details\":\"Process a bridge transaction (owner only - simulates L2 processing)\",\"params\":{\"transactionId\":\"The transaction ID to process\"}},\"transferOwnership(address)\":{\"details\":\"Transfer ownership (owner only)\",\"params\":{\"newOwner\":\"The new owner address\"}},\"updateBridgeFee(uint256)\":{\"details\":\"Update bridge fee (owner only)\",\"params\":{\"_newFee\":\"The new bridge fee in wei\"}},\"updateBridgeStatus(bool)\":{\"details\":\"Update bridge status (owner only)\",\"params\":{\"_active\":\"The new bridge status\"}},\"withdrawFees()\":{\"details\":\"Withdraw collected fees (owner only)\"}},\"title\":\"ArbitrumBridge\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"bridgeToArbitrum(string)\":{\"notice\":\"Sends ETH to be bridged to Arbitrum L2\"}},\"notice\":\"This is a demonstration contract for testnet use\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/ArbitrumBridge.sol\":\"ArbitrumBridge\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/ArbitrumBridge.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\n/**\\n * @title ArbitrumBridge\\n * @dev A simplified bridge contract for bridging ETH from Ethereum L1 to Arbitrum L2\\n * @notice This is a demonstration contract for testnet use\\n */\\ncontract ArbitrumBridge {\\n    address public owner;\\n    uint256 public bridgeFee; // Fee in wei (e.g., 0.001 ETH)\\n    bool public bridgeActive;\\n    uint256 public totalBridged;\\n    uint256 public transactionCounter;\\n\\n    struct BridgeTransaction {\\n        address user;\\n        uint256 ethAmount;\\n        string arbitrumRecipient; // Arbitrum address as string\\n        uint256 timestamp;\\n        bool processed;\\n    }\\n\\n    mapping(uint256 => BridgeTransaction) public bridgeTransactions;\\n    mapping(address => uint256[]) public userTransactions;\\n\\n    event BridgeInitiated(\\n        uint256 indexed transactionId,\\n        address indexed user,\\n        uint256 ethAmount,\\n        string arbitrumRecipient,\\n        uint256 timestamp\\n    );\\n\\n    event BridgeProcessed(uint256 indexed transactionId, address indexed user, uint256 ethAmount);\\n\\n    event BridgeFeeUpdated(uint256 newFee);\\n    event BridgeStatusUpdated(bool status);\\n    event FeesWithdrawn(address indexed owner, uint256 amount);\\n\\n    modifier onlyOwner() {\\n        require(msg.sender == owner, \\\"Only owner can call this function\\\");\\n        _;\\n    }\\n\\n    modifier bridgeIsActive() {\\n        require(bridgeActive, \\\"Bridge is currently inactive\\\");\\n        _;\\n    }\\n\\n    constructor(uint256 _bridgeFee) {\\n        owner = msg.sender;\\n        bridgeFee = _bridgeFee; // e.g., 0.001 ether\\n        bridgeActive = true;\\n    }\\n\\n    /**\\n     * @dev Bridge ETH to Arbitrum\\n     * @param arbitrumRecipient The recipient address on Arbitrum (as string)\\n     * @notice Sends ETH to be bridged to Arbitrum L2\\n     */\\n    function bridgeToArbitrum(string memory arbitrumRecipient) external payable bridgeIsActive {\\n        require(msg.value > bridgeFee, \\\"Amount must be greater than bridge fee\\\");\\n        require(bytes(arbitrumRecipient).length > 0, \\\"Arbitrum recipient address required\\\");\\n\\n        uint256 ethToBridge = msg.value - bridgeFee;\\n        uint256 transactionId = transactionCounter++;\\n\\n        bridgeTransactions[transactionId] = BridgeTransaction({\\n            user: msg.sender,\\n            ethAmount: ethToBridge,\\n            arbitrumRecipient: arbitrumRecipient,\\n            timestamp: block.timestamp,\\n            processed: false\\n        });\\n\\n        userTransactions[msg.sender].push(transactionId);\\n        totalBridged += ethToBridge;\\n\\n        emit BridgeInitiated(transactionId, msg.sender, ethToBridge, arbitrumRecipient, block.timestamp);\\n    }\\n\\n    /**\\n     * @dev Process a bridge transaction (owner only - simulates L2 processing)\\n     * @param transactionId The transaction ID to process\\n     */\\n    function processBridgeTransaction(uint256 transactionId) external onlyOwner {\\n        BridgeTransaction storage transaction = bridgeTransactions[transactionId];\\n        require(!transaction.processed, \\\"Transaction already processed\\\");\\n        require(transaction.user != address(0), \\\"Transaction does not exist\\\");\\n\\n        transaction.processed = true;\\n\\n        emit BridgeProcessed(transactionId, transaction.user, transaction.ethAmount);\\n    }\\n\\n    /**\\n     * @dev Get bridge transaction details\\n     * @param transactionId The transaction ID\\n     * @return The bridge transaction details\\n     */\\n    function getBridgeTransaction(uint256 transactionId) external view returns (BridgeTransaction memory) {\\n        return bridgeTransactions[transactionId];\\n    }\\n\\n    /**\\n     * @dev Get user's bridge transaction IDs\\n     * @param user The user address\\n     * @return Array of transaction IDs\\n     */\\n    function getUserTransactions(address user) external view returns (uint256[] memory) {\\n        return userTransactions[user];\\n    }\\n\\n    /**\\n     * @dev Get total number of transactions\\n     * @return The total transaction count\\n     */\\n    function getTotalTransactions() external view returns (uint256) {\\n        return transactionCounter;\\n    }\\n\\n    /**\\n     * @dev Get bridge statistics\\n     * @return totalBridged, totalTransactions, bridgeFee, bridgeActive\\n     */\\n    function getBridgeStats() external view returns (uint256, uint256, uint256, bool) {\\n        return (totalBridged, transactionCounter, bridgeFee, bridgeActive);\\n    }\\n\\n    // Owner functions\\n\\n    /**\\n     * @dev Update bridge fee (owner only)\\n     * @param _newFee The new bridge fee in wei\\n     */\\n    function updateBridgeFee(uint256 _newFee) external onlyOwner {\\n        bridgeFee = _newFee;\\n        emit BridgeFeeUpdated(_newFee);\\n    }\\n\\n    /**\\n     * @dev Update bridge status (owner only)\\n     * @param _active The new bridge status\\n     */\\n    function updateBridgeStatus(bool _active) external onlyOwner {\\n        bridgeActive = _active;\\n        emit BridgeStatusUpdated(_active);\\n    }\\n\\n    /**\\n     * @dev Withdraw collected fees (owner only)\\n     */\\n    function withdrawFees() external onlyOwner {\\n        uint256 balance = address(this).balance;\\n        require(balance > 0, \\\"No fees to withdraw\\\");\\n\\n        payable(owner).transfer(balance);\\n        emit FeesWithdrawn(owner, balance);\\n    }\\n\\n    /**\\n     * @dev Emergency withdrawal (owner only)\\n     */\\n    function emergencyWithdraw() external onlyOwner {\\n        uint256 balance = address(this).balance;\\n        if (balance > 0) {\\n            payable(owner).transfer(balance);\\n            emit FeesWithdrawn(owner, balance);\\n        }\\n    }\\n\\n    /**\\n     * @dev Transfer ownership (owner only)\\n     * @param newOwner The new owner address\\n     */\\n    function transferOwnership(address newOwner) external onlyOwner {\\n        require(newOwner != address(0), \\\"New owner cannot be zero address\\\");\\n        owner = newOwner;\\n    }\\n\\n    /**\\n     * @dev Get contract ETH balance\\n     * @return The contract's ETH balance\\n     */\\n    function getContractBalance() external view returns (uint256) {\\n        return address(this).balance;\\n    }\\n\\n    // Allow contract to receive ETH\\n    receive() external payable {}\\n}\\n\",\"keccak256\":\"0x7c0b807735441d4c251876249a24c27cab02a17f34a713a120c80aad2cf35716\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516111f23803806111f283398101604081905261002f91610058565b600080546001600160a01b0319163317905560019081556002805460ff19169091179055610071565b60006020828403121561006a57600080fd5b5051919050565b611172806100806000396000f3fe6080604052600436106101185760003560e01c80638da5cb5b116100a0578063e24f6ee911610064578063e24f6ee9146102e3578063ead93c8f14610303578063ef9253991461032d578063f2fde38b1461035a578063f73cf99c1461037a57600080fd5b80638da5cb5b14610241578063b5c604ff14610279578063b842ec441461028e578063c03c5689146102ae578063db2e21bc146102ce57600080fd5b80635a1c0366116100e75780635a1c0366146101b55780635b09c5b3146101d557806367a1791a146102025780636f9fb98a1461021857806382b12dd71461022b57600080fd5b806314e887e8146101245780632165cbb71461014d578063476343ee1461018b5780634d09332b146101a257600080fd5b3661011f57005b600080fd5b34801561013057600080fd5b5061013a60045481565b6040519081526020015b60405180910390f35b34801561015957600080fd5b5060035460045460015460025460ff166040805194855260208501939093529183015215156060820152608001610144565b34801561019757600080fd5b506101a06103ab565b005b6101a06101b0366004610cb6565b6104a1565b3480156101c157600080fd5b506101a06101d0366004610d67565b6106ee565b3480156101e157600080fd5b506101f56101f0366004610d67565b610754565b6040516101449190610dc6565b34801561020e57600080fd5b5061013a60035481565b34801561022457600080fd5b504761013a565b34801561023757600080fd5b5061013a60015481565b34801561024d57600080fd5b50600054610261906001600160a01b031681565b6040516001600160a01b039091168152602001610144565b34801561028557600080fd5b5060045461013a565b34801561029a57600080fd5b5061013a6102a9366004610e3c565b61087d565b3480156102ba57600080fd5b506101a06102c9366004610d67565b6108ae565b3480156102da57600080fd5b506101a06109f5565b3480156102ef57600080fd5b506101a06102fe366004610e66565b610a62565b34801561030f57600080fd5b5060025461031d9060ff1681565b6040519015158152602001610144565b34801561033957600080fd5b5061034d610348366004610e8f565b610acd565b6040516101449190610eaa565b34801561036657600080fd5b506101a0610375366004610e8f565b610b39565b34801561038657600080fd5b5061039a610395366004610d67565b610bdb565b604051610144959493929190610eee565b6000546001600160a01b031633146103de5760405162461bcd60e51b81526004016103d590610f2e565b60405180910390fd5b47806104225760405162461bcd60e51b81526020600482015260136024820152724e6f206665657320746f20776974686472617760681b60448201526064016103d5565b600080546040516001600160a01b039091169183156108fc02918491818181858888f1935050505015801561045b573d6000803e3d6000fd5b506000546040518281526001600160a01b03909116907fc0819c13be868895eb93e40eaceb96de976442fa1d404e5c55f14bb65a8c489a9060200160405180910390a250565b60025460ff166104f35760405162461bcd60e51b815260206004820152601c60248201527f4272696467652069732063757272656e746c7920696e6163746976650000000060448201526064016103d5565b60015434116105535760405162461bcd60e51b815260206004820152602660248201527f416d6f756e74206d7573742062652067726561746572207468616e206272696460448201526567652066656560d01b60648201526084016103d5565b60008151116105b05760405162461bcd60e51b815260206004820152602360248201527f417262697472756d20726563697069656e7420616464726573732072657175696044820152621c995960ea1b60648201526084016103d5565b6000600154346105c09190610f85565b6004805491925060009190826105d583610f9e565b909155506040805160a0810182523381526020808201868152828401888152426060850152600060808501819052868152600590935293909120825181546001600160a01b0319166001600160a01b039091161781559051600182015591519293509160028201906106479082611040565b5060608201516003828101919091556080909201516004909101805460ff191691151591909117905533600090815260066020908152604082208054600181018255908352908220018390558154849291906106a4908490611100565b9091555050604051339082907f25a98330ae565dc524e69394e0d0702aaef575a2ad2386f24ebe160197d0c43d906106e190869088904290611113565b60405180910390a3505050565b6000546001600160a01b031633146107185760405162461bcd60e51b81526004016103d590610f2e565b60018190556040518181527f42dfb00d085d601e55327921154ae76c1b24270b026c5a0c51caee18eb4c401f906020015b60405180910390a150565b6107916040518060a0016040528060006001600160a01b031681526020016000815260200160608152602001600081526020016000151581525090565b600082815260056020908152604091829020825160a08101845281546001600160a01b0316815260018201549281019290925260028101805492939192918401916107db90610fb7565b80601f016020809104026020016040519081016040528092919081815260200182805461080790610fb7565b80156108545780601f1061082957610100808354040283529160200191610854565b820191906000526020600020905b81548152906001019060200180831161083757829003601f168201915b50505091835250506003820154602082015260049091015460ff16151560409091015292915050565b6006602052816000526040600020818154811061089957600080fd5b90600052602060002001600091509150505481565b6000546001600160a01b031633146108d85760405162461bcd60e51b81526004016103d590610f2e565b6000818152600560205260409020600481015460ff161561093b5760405162461bcd60e51b815260206004820152601d60248201527f5472616e73616374696f6e20616c72656164792070726f63657373656400000060448201526064016103d5565b80546001600160a01b03166109925760405162461bcd60e51b815260206004820152601a60248201527f5472616e73616374696f6e20646f6573206e6f7420657869737400000000000060448201526064016103d5565b60048101805460ff191660019081179091558154908201546040516001600160a01b039092169184917fae06ffc861c1f161455ae98b5f037e312770cf1871a765da1a0df35e56372658916109e991815260200190565b60405180910390a35050565b6000546001600160a01b03163314610a1f5760405162461bcd60e51b81526004016103d590610f2e565b478015610a5f57600080546040516001600160a01b039091169183156108fc02918491818181858888f1935050505015801561045b573d6000803e3d6000fd5b50565b6000546001600160a01b03163314610a8c5760405162461bcd60e51b81526004016103d590610f2e565b6002805460ff19168215159081179091556040519081527fb3418989d06835b5c215eebb4d54ed6be7bbb66eb4807164740a2e082fa782d590602001610749565b6001600160a01b038116600090815260066020908152604091829020805483518184028101840190945280845260609392830182828015610b2d57602002820191906000526020600020905b815481526020019060010190808311610b19575b50505050509050919050565b6000546001600160a01b03163314610b635760405162461bcd60e51b81526004016103d590610f2e565b6001600160a01b038116610bb95760405162461bcd60e51b815260206004820181905260248201527f4e6577206f776e65722063616e6e6f74206265207a65726f206164647265737360448201526064016103d5565b600080546001600160a01b0319166001600160a01b0392909216919091179055565b6005602052600090815260409020805460018201546002830180546001600160a01b03909316939192610c0d90610fb7565b80601f0160208091040260200160405190810160405280929190818152602001828054610c3990610fb7565b8015610c865780601f10610c5b57610100808354040283529160200191610c86565b820191906000526020600020905b815481529060010190602001808311610c6957829003601f168201915b50505050600383015460049093015491929160ff16905085565b634e487b7160e01b600052604160045260246000fd5b600060208284031215610cc857600080fd5b813567ffffffffffffffff80821115610ce057600080fd5b818401915084601f830112610cf457600080fd5b813581811115610d0657610d06610ca0565b604051601f8201601f19908116603f01168101908382118183101715610d2e57610d2e610ca0565b81604052828152876020848701011115610d4757600080fd5b826020860160208301376000928101602001929092525095945050505050565b600060208284031215610d7957600080fd5b5035919050565b6000815180845260005b81811015610da657602081850181015186830182015201610d8a565b506000602082860101526020601f19601f83011685010191505092915050565b6020815260018060a01b038251166020820152602082015160408201526000604083015160a06060840152610dfe60c0840182610d80565b9050606084015160808401526080840151151560a08401528091505092915050565b80356001600160a01b0381168114610e3757600080fd5b919050565b60008060408385031215610e4f57600080fd5b610e5883610e20565b946020939093013593505050565b600060208284031215610e7857600080fd5b81358015158114610e8857600080fd5b9392505050565b600060208284031215610ea157600080fd5b610e8882610e20565b6020808252825182820181905260009190848201906040850190845b81811015610ee257835183529284019291840191600101610ec6565b50909695505050505050565b60018060a01b038616815284602082015260a060408201526000610f1560a0830186610d80565b6060830194909452509015156080909101529392505050565b60208082526021908201527f4f6e6c79206f776e65722063616e2063616c6c20746869732066756e6374696f6040820152603760f91b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b81810381811115610f9857610f98610f6f565b92915050565b600060018201610fb057610fb0610f6f565b5060010190565b600181811c90821680610fcb57607f821691505b602082108103610feb57634e487b7160e01b600052602260045260246000fd5b50919050565b601f82111561103b57600081815260208120601f850160051c810160208610156110185750805b601f850160051c820191505b8181101561103757828155600101611024565b5050505b505050565b815167ffffffffffffffff81111561105a5761105a610ca0565b61106e816110688454610fb7565b84610ff1565b602080601f8311600181146110a3576000841561108b5750858301515b600019600386901b1c1916600185901b178555611037565b600085815260208120601f198616915b828110156110d2578886015182559484019460019091019084016110b3565b50858210156110f05787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b80820180821115610f9857610f98610f6f565b83815260606020820152600061112c6060830185610d80565b905082604083015294935050505056fea2646970667358221220930a827948d20c39c907711f975d9700ea00ff789fa60b7b9ed7ee1540715a9b64736f6c63430008140033",
+  "deployedBytecode": "0x6080604052600436106101185760003560e01c80638da5cb5b116100a0578063e24f6ee911610064578063e24f6ee9146102e3578063ead93c8f14610303578063ef9253991461032d578063f2fde38b1461035a578063f73cf99c1461037a57600080fd5b80638da5cb5b14610241578063b5c604ff14610279578063b842ec441461028e578063c03c5689146102ae578063db2e21bc146102ce57600080fd5b80635a1c0366116100e75780635a1c0366146101b55780635b09c5b3146101d557806367a1791a146102025780636f9fb98a1461021857806382b12dd71461022b57600080fd5b806314e887e8146101245780632165cbb71461014d578063476343ee1461018b5780634d09332b146101a257600080fd5b3661011f57005b600080fd5b34801561013057600080fd5b5061013a60045481565b6040519081526020015b60405180910390f35b34801561015957600080fd5b5060035460045460015460025460ff166040805194855260208501939093529183015215156060820152608001610144565b34801561019757600080fd5b506101a06103ab565b005b6101a06101b0366004610cb6565b6104a1565b3480156101c157600080fd5b506101a06101d0366004610d67565b6106ee565b3480156101e157600080fd5b506101f56101f0366004610d67565b610754565b6040516101449190610dc6565b34801561020e57600080fd5b5061013a60035481565b34801561022457600080fd5b504761013a565b34801561023757600080fd5b5061013a60015481565b34801561024d57600080fd5b50600054610261906001600160a01b031681565b6040516001600160a01b039091168152602001610144565b34801561028557600080fd5b5060045461013a565b34801561029a57600080fd5b5061013a6102a9366004610e3c565b61087d565b3480156102ba57600080fd5b506101a06102c9366004610d67565b6108ae565b3480156102da57600080fd5b506101a06109f5565b3480156102ef57600080fd5b506101a06102fe366004610e66565b610a62565b34801561030f57600080fd5b5060025461031d9060ff1681565b6040519015158152602001610144565b34801561033957600080fd5b5061034d610348366004610e8f565b610acd565b6040516101449190610eaa565b34801561036657600080fd5b506101a0610375366004610e8f565b610b39565b34801561038657600080fd5b5061039a610395366004610d67565b610bdb565b604051610144959493929190610eee565b6000546001600160a01b031633146103de5760405162461bcd60e51b81526004016103d590610f2e565b60405180910390fd5b47806104225760405162461bcd60e51b81526020600482015260136024820152724e6f206665657320746f20776974686472617760681b60448201526064016103d5565b600080546040516001600160a01b039091169183156108fc02918491818181858888f1935050505015801561045b573d6000803e3d6000fd5b506000546040518281526001600160a01b03909116907fc0819c13be868895eb93e40eaceb96de976442fa1d404e5c55f14bb65a8c489a9060200160405180910390a250565b60025460ff166104f35760405162461bcd60e51b815260206004820152601c60248201527f4272696467652069732063757272656e746c7920696e6163746976650000000060448201526064016103d5565b60015434116105535760405162461bcd60e51b815260206004820152602660248201527f416d6f756e74206d7573742062652067726561746572207468616e206272696460448201526567652066656560d01b60648201526084016103d5565b60008151116105b05760405162461bcd60e51b815260206004820152602360248201527f417262697472756d20726563697069656e7420616464726573732072657175696044820152621c995960ea1b60648201526084016103d5565b6000600154346105c09190610f85565b6004805491925060009190826105d583610f9e565b909155506040805160a0810182523381526020808201868152828401888152426060850152600060808501819052868152600590935293909120825181546001600160a01b0319166001600160a01b039091161781559051600182015591519293509160028201906106479082611040565b5060608201516003828101919091556080909201516004909101805460ff191691151591909117905533600090815260066020908152604082208054600181018255908352908220018390558154849291906106a4908490611100565b9091555050604051339082907f25a98330ae565dc524e69394e0d0702aaef575a2ad2386f24ebe160197d0c43d906106e190869088904290611113565b60405180910390a3505050565b6000546001600160a01b031633146107185760405162461bcd60e51b81526004016103d590610f2e565b60018190556040518181527f42dfb00d085d601e55327921154ae76c1b24270b026c5a0c51caee18eb4c401f906020015b60405180910390a150565b6107916040518060a0016040528060006001600160a01b031681526020016000815260200160608152602001600081526020016000151581525090565b600082815260056020908152604091829020825160a08101845281546001600160a01b0316815260018201549281019290925260028101805492939192918401916107db90610fb7565b80601f016020809104026020016040519081016040528092919081815260200182805461080790610fb7565b80156108545780601f1061082957610100808354040283529160200191610854565b820191906000526020600020905b81548152906001019060200180831161083757829003601f168201915b50505091835250506003820154602082015260049091015460ff16151560409091015292915050565b6006602052816000526040600020818154811061089957600080fd5b90600052602060002001600091509150505481565b6000546001600160a01b031633146108d85760405162461bcd60e51b81526004016103d590610f2e565b6000818152600560205260409020600481015460ff161561093b5760405162461bcd60e51b815260206004820152601d60248201527f5472616e73616374696f6e20616c72656164792070726f63657373656400000060448201526064016103d5565b80546001600160a01b03166109925760405162461bcd60e51b815260206004820152601a60248201527f5472616e73616374696f6e20646f6573206e6f7420657869737400000000000060448201526064016103d5565b60048101805460ff191660019081179091558154908201546040516001600160a01b039092169184917fae06ffc861c1f161455ae98b5f037e312770cf1871a765da1a0df35e56372658916109e991815260200190565b60405180910390a35050565b6000546001600160a01b03163314610a1f5760405162461bcd60e51b81526004016103d590610f2e565b478015610a5f57600080546040516001600160a01b039091169183156108fc02918491818181858888f1935050505015801561045b573d6000803e3d6000fd5b50565b6000546001600160a01b03163314610a8c5760405162461bcd60e51b81526004016103d590610f2e565b6002805460ff19168215159081179091556040519081527fb3418989d06835b5c215eebb4d54ed6be7bbb66eb4807164740a2e082fa782d590602001610749565b6001600160a01b038116600090815260066020908152604091829020805483518184028101840190945280845260609392830182828015610b2d57602002820191906000526020600020905b815481526020019060010190808311610b19575b50505050509050919050565b6000546001600160a01b03163314610b635760405162461bcd60e51b81526004016103d590610f2e565b6001600160a01b038116610bb95760405162461bcd60e51b815260206004820181905260248201527f4e6577206f776e65722063616e6e6f74206265207a65726f206164647265737360448201526064016103d5565b600080546001600160a01b0319166001600160a01b0392909216919091179055565b6005602052600090815260409020805460018201546002830180546001600160a01b03909316939192610c0d90610fb7565b80601f0160208091040260200160405190810160405280929190818152602001828054610c3990610fb7565b8015610c865780601f10610c5b57610100808354040283529160200191610c86565b820191906000526020600020905b815481529060010190602001808311610c6957829003601f168201915b50505050600383015460049093015491929160ff16905085565b634e487b7160e01b600052604160045260246000fd5b600060208284031215610cc857600080fd5b813567ffffffffffffffff80821115610ce057600080fd5b818401915084601f830112610cf457600080fd5b813581811115610d0657610d06610ca0565b604051601f8201601f19908116603f01168101908382118183101715610d2e57610d2e610ca0565b81604052828152876020848701011115610d4757600080fd5b826020860160208301376000928101602001929092525095945050505050565b600060208284031215610d7957600080fd5b5035919050565b6000815180845260005b81811015610da657602081850181015186830182015201610d8a565b506000602082860101526020601f19601f83011685010191505092915050565b6020815260018060a01b038251166020820152602082015160408201526000604083015160a06060840152610dfe60c0840182610d80565b9050606084015160808401526080840151151560a08401528091505092915050565b80356001600160a01b0381168114610e3757600080fd5b919050565b60008060408385031215610e4f57600080fd5b610e5883610e20565b946020939093013593505050565b600060208284031215610e7857600080fd5b81358015158114610e8857600080fd5b9392505050565b600060208284031215610ea157600080fd5b610e8882610e20565b6020808252825182820181905260009190848201906040850190845b81811015610ee257835183529284019291840191600101610ec6565b50909695505050505050565b60018060a01b038616815284602082015260a060408201526000610f1560a0830186610d80565b6060830194909452509015156080909101529392505050565b60208082526021908201527f4f6e6c79206f776e65722063616e2063616c6c20746869732066756e6374696f6040820152603760f91b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b81810381811115610f9857610f98610f6f565b92915050565b600060018201610fb057610fb0610f6f565b5060010190565b600181811c90821680610fcb57607f821691505b602082108103610feb57634e487b7160e01b600052602260045260246000fd5b50919050565b601f82111561103b57600081815260208120601f850160051c810160208610156110185750805b601f850160051c820191505b8181101561103757828155600101611024565b5050505b505050565b815167ffffffffffffffff81111561105a5761105a610ca0565b61106e816110688454610fb7565b84610ff1565b602080601f8311600181146110a3576000841561108b5750858301515b600019600386901b1c1916600185901b178555611037565b600085815260208120601f198616915b828110156110d2578886015182559484019460019091019084016110b3565b50858210156110f05787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b80820180821115610f9857610f98610f6f565b83815260606020820152600061112c6060830185610d80565b905082604083015294935050505056fea2646970667358221220930a827948d20c39c907711f975d9700ea00ff789fa60b7b9ed7ee1540715a9b64736f6c63430008140033",
+  "devdoc": {
+    "details": "A simplified bridge contract for bridging ETH from Ethereum L1 to Arbitrum L2",
+    "kind": "dev",
+    "methods": {
+      "bridgeToArbitrum(string)": {
+        "details": "Bridge ETH to Arbitrum",
+        "params": {
+          "arbitrumRecipient": "The recipient address on Arbitrum (as string)"
+        }
+      },
+      "emergencyWithdraw()": {
+        "details": "Emergency withdrawal (owner only)"
+      },
+      "getBridgeStats()": {
+        "details": "Get bridge statistics",
+        "returns": {
+          "_0": "totalBridged, totalTransactions, bridgeFee, bridgeActive"
+        }
+      },
+      "getBridgeTransaction(uint256)": {
+        "details": "Get bridge transaction details",
+        "params": {
+          "transactionId": "The transaction ID"
+        },
+        "returns": {
+          "_0": "The bridge transaction details"
+        }
+      },
+      "getContractBalance()": {
+        "details": "Get contract ETH balance",
+        "returns": {
+          "_0": "The contract's ETH balance"
+        }
+      },
+      "getTotalTransactions()": {
+        "details": "Get total number of transactions",
+        "returns": {
+          "_0": "The total transaction count"
+        }
+      },
+      "getUserTransactions(address)": {
+        "details": "Get user's bridge transaction IDs",
+        "params": {
+          "user": "The user address"
+        },
+        "returns": {
+          "_0": "Array of transaction IDs"
+        }
+      },
+      "processBridgeTransaction(uint256)": {
+        "details": "Process a bridge transaction (owner only - simulates L2 processing)",
+        "params": {
+          "transactionId": "The transaction ID to process"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfer ownership (owner only)",
+        "params": {
+          "newOwner": "The new owner address"
+        }
+      },
+      "updateBridgeFee(uint256)": {
+        "details": "Update bridge fee (owner only)",
+        "params": {
+          "_newFee": "The new bridge fee in wei"
+        }
+      },
+      "updateBridgeStatus(bool)": {
+        "details": "Update bridge status (owner only)",
+        "params": {
+          "_active": "The new bridge status"
+        }
+      },
+      "withdrawFees()": {
+        "details": "Withdraw collected fees (owner only)"
+      }
+    },
+    "title": "ArbitrumBridge",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "bridgeToArbitrum(string)": {
+        "notice": "Sends ETH to be bridged to Arbitrum L2"
+      }
+    },
+    "notice": "This is a demonstration contract for testnet use",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 3099,
+        "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+        "label": "owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 3101,
+        "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+        "label": "bridgeFee",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 3103,
+        "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+        "label": "bridgeActive",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_bool"
+      },
+      {
+        "astId": 3105,
+        "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+        "label": "totalBridged",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 3107,
+        "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+        "label": "transactionCounter",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 3123,
+        "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+        "label": "bridgeTransactions",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_mapping(t_uint256,t_struct(BridgeTransaction)3118_storage)"
+      },
+      {
+        "astId": 3128,
+        "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+        "label": "userTransactions",
+        "offset": 0,
+        "slot": "6",
+        "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_uint256)dyn_storage": {
+        "base": "t_uint256",
+        "encoding": "dynamic_array",
+        "label": "uint256[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256[])",
+        "numberOfBytes": "32",
+        "value": "t_array(t_uint256)dyn_storage"
+      },
+      "t_mapping(t_uint256,t_struct(BridgeTransaction)3118_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct ArbitrumBridge.BridgeTransaction)",
+        "numberOfBytes": "32",
+        "value": "t_struct(BridgeTransaction)3118_storage"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(BridgeTransaction)3118_storage": {
+        "encoding": "inplace",
+        "label": "struct ArbitrumBridge.BridgeTransaction",
+        "members": [
+          {
+            "astId": 3109,
+            "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+            "label": "user",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 3111,
+            "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+            "label": "ethAmount",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 3113,
+            "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+            "label": "arbitrumRecipient",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 3115,
+            "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+            "label": "timestamp",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 3117,
+            "contract": "contracts/ArbitrumBridge.sol:ArbitrumBridge",
+            "label": "processed",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_bool"
+          }
+        ],
+        "numberOfBytes": "160"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

@@ -6,8 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { hardhat } from "viem/chains";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import GoogleAuthButton from "~~/components/GoogleAuthButton";
+import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
 
 type HeaderMenuLink = {
@@ -24,6 +24,11 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "🌱 EcoQuest",
     href: "/ecoquest",
+  },
+
+  {
+    label: "🎮 EcoQuest Game",
+    href: "/ecoquest/game",
   },
   {
     label: "🏆 Leaderboard",

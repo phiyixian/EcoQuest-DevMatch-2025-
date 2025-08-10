@@ -1,7 +1,7 @@
 "use client";
 
-import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
 
 const WalletSignInButton = () => {
   const { isConnected } = useAccount();
@@ -10,16 +10,10 @@ const WalletSignInButton = () => {
   if (isConnected) return null;
 
   return (
-    <button
-      className="btn btn-sm ml-2"
-      onClick={() => openConnectModal?.()}
-      aria-label="Sign in via wallet"
-    >
+    <button className="btn btn-sm ml-2" onClick={() => openConnectModal?.()} aria-label="Sign in via wallet">
       Sign in via Wallet
     </button>
   );
 };
 
 export default WalletSignInButton;
-
-
